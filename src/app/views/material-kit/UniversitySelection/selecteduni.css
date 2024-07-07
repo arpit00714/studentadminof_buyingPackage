@@ -1,0 +1,3 @@
+.MuiDataGrid-columnHeaderTitleContainerContent span {
+    display: none !important;
+}

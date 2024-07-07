@@ -1,0 +1,270 @@
+import React, { useState, useEffect } from "react";
+import { Box, Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import apiUrl from "URLS/ApiUrl";
+import "./selecteduni.css";
+import { H3 } from "app/components/Typography";
+import { universityselectBystudent } from "Apis/packageselect";
+import { UpdateStudentUniverstatus } from "Apis/University";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import { UpdateStudentSteps } from "Apis/studentuser";
+import { useNavigate } from "react-router-dom";
+
+const columns = [
+  { field: "universityName", headerName: "University Name", width: 150 },
+  { field: "applicationFee", headerName: "Application Fee", width: 150 },
+  { field: "country", headerName: "Country", width: 110 },
+  { field: "state", headerName: "State", width: 110 },
+  { field: "ielts", headerName: "IELTS", width: 110 },
+  { field: "intake", headerName: "Intake", width: 110 },
+  { field: "referenceLink", headerName: "Reference Link", width: 110 },
+  { field: "reportingCharges", headerName: "Reporting Charges", width: 110 },
+  { field: "tutionFee", headerName: "Tuition Fee", width: 110 },
+];
+
+function SelectUniversityForm() {
+  const navigation = useNavigate();
+  const [selectedUniversitiesList, setSelectedUniversitiesList] = useState([]);
+  const [selectionModel, setSelectionModel] = useState([]);
+  const [disableCheckbox, setDisableCheckbox] = useState({});
+  const [totalApplicationFee, setTotalApplicationFee] = useState(0);
+  const [universitiesPerConsultancy, setUniversitiesPerConsultancy] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedbyStudent, setSelectedByStudent] = useState([]);
+  const userID = localStorage.getItem("userID");
+  const [totalSelectedUniversities, setTotalSelectedUniversities] = useState(0);
+  const [totalAllowedUniversities, setTotalAllowedUniversities] = useState(0);
+  const [selectionDone, setSelectionDone] = useState(false);
+  const [reachedLimit, setReachedLimit] = useState(false);
+
+  useEffect(() => {
+    const getUniversity = async () => {
+      const endpoint = `${apiUrl}/api/universitiesattach/byAdmin/${userID}`;
+      const response = await fetch(endpoint);
+      const data = await response.json();
+
+      if (data.status === 200) {
+        setSelectedUniversitiesList(data.message);
+        console.log("university by admin", data.message);
+      }
+    };
+    getUniversity();
+  }, [userID]);
+
+  useEffect(() => {
+    const getstudentselectionstatus = async () => {
+      const endpoint = `${apiUrl}/api/universitiesattach/getbyStudent/${userID}`;
+      const response = await fetch(endpoint);
+      const data = await response.json();
+
+      if (data.status === 200) {
+        console.log("data.message", data.message);
+        if (data.message[0].studentSelectStatus === true) {
+          setSelectionDone(true);
+        }
+      }
+    };
+    getstudentselectionstatus();
+  }, [userID]);
+
+  useEffect(() => {
+    const getPackageUniversity = async () => {
+      const endpoint = `${apiUrl}/api/studentbuypacakages/getTotalpacakagebyid/${userID}`;
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      if (data.status === 200) {
+        console.log("data", data);
+        const activePackages = data.message.filter((pkg) => !pkg.expiry);
+        console.log("activePackages", activePackages);
+        const totalUniversitiesPerConsultancy = data.universitiesPerConsultancy.map((item) => ({
+          ...item,
+          totalUniversities: activePackages
+            .filter((pkg) => pkg.consultancyId === item.id)
+            .reduce((sum, pkg) => sum + pkg.universitiesperPackage, 0),
+        }));
+        console.log("totalUniversitiesPerConsultancy", totalUniversitiesPerConsultancy);
+        setUniversitiesPerConsultancy(totalUniversitiesPerConsultancy);
+
+        const initialDisableCheckbox = {};
+        totalUniversitiesPerConsultancy.forEach((item) => {
+          initialDisableCheckbox[item.name] = false;
+        });
+        setDisableCheckbox(initialDisableCheckbox);
+        const totalAllowed = totalUniversitiesPerConsultancy.reduce(
+          (sum, item) => sum + item.totalUniversities,
+          0
+        );
+        setTotalAllowedUniversities(totalAllowed);
+      }
+    };
+    getPackageUniversity();
+  }, [userID]);
+
+  useEffect(() => {
+    const countSelected = () => {
+      let total = 0;
+      for (const consultancy of universitiesPerConsultancy) {
+        total += selectionModel.filter((id) => {
+          const uni = selectedUniversitiesList.find((u) => u.id === id);
+          return uni && uni.country === consultancy.name;
+        }).length;
+      }
+      setTotalSelectedUniversities(total);
+    };
+    countSelected();
+  }, [selectionModel, universitiesPerConsultancy, selectedUniversitiesList]);
+
+  const handleSelectionModelChange = (newSelection) => {
+    const selectedItems = newSelection.map((id) =>
+      selectedUniversitiesList.find((uni) => uni.id === id)
+    );
+
+    // Calculate selected universities by country
+    const selectedUniversitiesByCountry = {};
+    selectedItems.forEach((item) => {
+      selectedUniversitiesByCountry[item.country] =
+        (selectedUniversitiesByCountry[item.country] || 0) + 1;
+    });
+
+    let isValidSelection = true;
+    const newDisableCheckbox = {};
+
+    // Check if the selection exceeds the package limit for any consultancy
+    for (const consultancy of universitiesPerConsultancy) {
+      const selectedCount = selectedUniversitiesByCountry[consultancy.name] || 0;
+
+      if (selectedCount > consultancy.totalUniversities) {
+        isValidSelection = false;
+        alert(`You have exceeded the limit of universities for ${consultancy.name}.`);
+        break;
+      }
+
+      newDisableCheckbox[consultancy.name] =
+        selectedCount === consultancy.totalUniversities;
+    }
+
+    // Check if total selected universities exceed the allowed limit
+    if (newSelection.length > totalAllowedUniversities) {
+      isValidSelection = false;
+      alert("You have reached the total limit of universities.");
+      setReachedLimit(true);
+    } else {
+      setReachedLimit(false);
+    }
+    if (isValidSelection) {
+      setSelectionModel(newSelection);
+      setDisableCheckbox(newDisableCheckbox);
+
+      // Calculate total application fee for selected universities
+      let totalPrice = 0;
+      selectedItems.forEach((item) => {
+        totalPrice += parseFloat(item.applicationFee);
+      });
+      setTotalApplicationFee(totalPrice);
+    }
+
+    setSelectedByStudent(selectedItems);
+  };
+
+  const SelectUniversityByStudent = async () => {
+    if (selectedbyStudent.length === 0) {
+      alert("Please select at least one university");
+    } else {
+      setOpen(true);
+    }
+  };
+  
+  const handleClose = async (confirm) => {
+    if (confirm) {
+      try {
+        const selctbystud = await universityselectBystudent({
+          uid: userID,
+          adduniversityId: selectedbyStudent,
+        });
+        console.log("selctbystud", selctbystud);
+        setOpen(false);
+        setSelectionDone(true);
+        await UpdateStudentUniverstatus(
+          {
+            studentSelectStatus: true,
+          },
+          userID
+        );
+        await UpdateStudentSteps(
+          {
+            steps: "3",
+          },
+          userID
+        );
+        navigation("/student/dashboard/default");
+      } catch (er) {
+        console.log("err", er);
+      }
+    } else {
+      setOpen(false);
+    }
+  };
+
+  return (
+    <div>
+      <Box sx={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={selectedUniversitiesList}
+          columns={columns}
+          onRowClick={(e) => console.log("onRowClicke", e)}
+          onRowSelectionModelChange={handleSelectionModelChange}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
+          pageSizeOptions={[5]}
+          disableColumnFilter
+          disableColumnMenu
+          disableColumnSelector
+          checkboxSelection
+          selectionModel={selectionModel}
+          isRowSelectable={(params) => {
+            const selectedCount = selectionModel.length;
+            const university = selectedUniversitiesList.find((uni) => uni.id === params.id);
+            if (!university) return false;
+            const consultancy = universitiesPerConsultancy.find((c) => c.name === university.country);
+            if (!consultancy) return false;
+            if (disableCheckbox[consultancy.name] || (reachedLimit && !selectionModel.includes(params.id))) {
+              return false;
+            }
+            return selectedCount < totalAllowedUniversities || selectionModel.includes(params.id);
+          }}
+        />
+      </Box>
+      <Box display="flex" justifyContent="flex-end" mt={2}>
+        <Button variant="contained" color="primary" onClick={SelectUniversityByStudent} disabled={selectionDone}>
+          Select University
+        </Button>
+      </Box>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Confirmation</DialogTitle>
+        <DialogContent>
+          <H3>Are you sure you want to select the universities?</H3>
+          <p>Once confirmed, you cannot change the selection.</p>
+          <p>Total Application Fee: ${totalApplicationFee.toFixed(2)}</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClose(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={() => handleClose(true)} color="primary">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
+
+export default SelectUniversityForm;

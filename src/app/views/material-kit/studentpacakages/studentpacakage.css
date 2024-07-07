@@ -1,0 +1,36 @@
+.MuiDataGrid-row:hover {
+    background: none !important;
+}
+
+.expired-cell {
+    color: red;
+}
+
+.expired-row .MuiDataGrid-cell {
+    color: red;
+}
+
+.non-expired.MuiDataGrid-cell {
+    color: rgb(21, 200, 48);
+}
+
+.css-f8dilj-MuiDataGrid-root .MuiDataGrid-virtualScrollerContent .MuiDataGrid-row {
+    color: green;
+}
+
+.iconclass {
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+/* .MuiDataGrid-columnHeaderTitleContainer {
+    display: none;
+}
+
+input {
+    display: none;
+} */
+
+.css-1ykxzib-MuiButtonBase-root-MuiCheckbox-root {
+    display: none;
+}

@@ -1,0 +1,428 @@
+import React, { useState } from "react";
+import { TextField, Button, Grid } from "@mui/material";
+import { H3 } from "app/components/Typography";
+
+function Compatativepre(props) {
+  const [editMode, setEditMode] = useState(false);
+  const [compatativeExamList, setCompatativeExamList] = useState(props.userData);
+  console.log("props.userData", props.userData)
+  const handleEditClick = () => {
+    setEditMode(true);
+  };
+
+  const handleInputChange = (index, examType, field, value) => {
+    const updatedList = [...compatativeExamList];
+    updatedList[index][examType][field] = value;
+    setCompatativeExamList(updatedList);
+  };
+
+  const handleSubmit = () => {
+    setEditMode(false);
+    // Add your submit logic here, e.g., sending the updated data to a server
+    console.log("Updated Data:", compatativeExamList);
+  };
+
+  return (
+    <div>
+      <Button variant="contained" color="primary" onClick={handleEditClick}>
+        Edit
+      </Button>
+      {editMode && (
+        <Button variant="contained" color="secondary" onClick={handleSubmit}>
+          Submit
+        </Button>
+      )}
+      {compatativeExamList.map((item, index) => (
+        <div key={index}>
+          {item?.GreExamForm && (
+            <div>
+              <H3>{item?.GreExamForm?.typeofexam}</H3>
+              <Grid container spacing={6}>
+                <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="examdate"
+                    label="Date of examination"
+                    value={item.GreExamForm.examdate || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "GreExamForm", "examdate", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    type="text"
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    name="Username"
+                    label="Username"
+                    value={item.GreExamForm.Username || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "GreExamForm", "Username", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    type="text"
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    name="Password"
+                    label="Password"
+                    value={item.GreExamForm.Password || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "GreExamForm", "Password", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    type="text"
+                    name="AWA"
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    label="AWA"
+                    value={item.GreExamForm.AWA || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "GreExamForm", "AWA", e.target.value)
+                    }
+                  />
+                </Grid>
+                <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="Quantitative"
+                    label="Quantitative"
+                    value={item.GreExamForm.Quantitative || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "GreExamForm", "Quantitative", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="Verbal"
+                    label="Verbal"
+                    value={item.GreExamForm.Verbal || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "GreExamForm", "Verbal", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="Total"
+                    label="Total"
+                    value={item.GreExamForm.Total || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "GreExamForm", "Total", e.target.value)
+                    }
+                  />
+                </Grid>
+              </Grid>
+            </div>
+          )}
+          {item?.ACTExamForm && (
+            <div>
+              <H3>{item.ACTExamForm.typeofexam}</H3>
+              <Grid container spacing={6}>
+                <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="ACTDateofexamination"
+                    label="Date of examination"
+                    value={item.ACTExamForm.examdate || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "ACTExamForm", "examdate", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="ACTUsername"
+                    label="Username"
+                    value={item.ACTExamForm.ACTUsername || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "ACTExamForm", "ACTUsername", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="ACTPassword"
+                    label="Password"
+                    value={item.ACTExamForm.ACTPassword || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "ACTExamForm", "ACTPassword", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="ACTAWA"
+                    label="AWA"
+                    value={item.ACTExamForm.ACTAWA || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "ACTExamForm", "ACTAWA", e.target.value)
+                    }
+                  />
+                </Grid>
+                <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="ACTIR"
+                    label="IR"
+                    value={item.ACTExamForm.ACTIR || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "ACTExamForm", "ACTIR", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="ACTQuantitative"
+                    label="Quantitative"
+                    value={item.ACTExamForm.ACTQuantitative || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "ACTExamForm", "ACTQuantitative", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="ACTVerbal"
+                    label="Verbal"
+                    value={item.ACTExamForm.ACTVerbal || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "ACTExamForm", "ACTVerbal", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="ACTTotal"
+                    label="Total"
+                    value={item.ACTExamForm.ACTTotal || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "ACTExamForm", "ACTTotal", e.target.value)
+                    }
+                  />
+                </Grid>
+              </Grid>
+            </div>
+          )}
+          {item?.IELTSExamForm && (
+            <div>
+              <H3>{item.IELTSExamForm.typeofexam}</H3>
+              <Grid container spacing={6}>
+                <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="IELTSDateofexamination"
+                    label="Date of examination"
+                    value={item.IELTSExamForm.examdate || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "IELTSExamForm", "examdate", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="IELTSUsername"
+                    label="Username"
+                    value={item.IELTSExamForm.IELTSUsername || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "IELTSExamForm", "IELTSUsername", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="IELTSPassword"
+                    label="Password"
+                    value={item.IELTSExamForm.IELTSPassword || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "IELTSExamForm", "IELTSPassword", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="IELTSReading"
+                    label="Reading"
+                    value={item.IELTSExamForm.IELTSReading || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "IELTSExamForm", "IELTSReading", e.target.value)
+                    }
+                  />
+                </Grid>
+                <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="IELTListening"
+                    label="Listening"
+                    value={item.IELTSExamForm.IELTListening || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "IELTSExamForm", "IELTListening", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="IELTSSpeaking"
+                    label="Speaking"
+                    value={item.IELTSExamForm.IELTSSpeaking || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "IELTSExamForm", "IELTSSpeaking", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="IELTSWriting"
+                    label="Writing"
+                    value={item.IELTSExamForm.IELTSWriting || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "IELTSExamForm", "IELTSWriting", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="IELTSTotal"
+                    label="Total"
+                    value={item.IELTSExamForm.IELTSTotal || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "IELTSExamForm", "IELTSTotal", e.target.value)
+                    }
+                  />
+                </Grid>
+              </Grid>
+            </div>
+          )}
+          {item?.TOEFLExamForm && (
+            <div>
+              <H3>{item.TOEFLExamForm.typeofexam}</H3>
+              <Grid container spacing={6}>
+                <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="TOEFLEDateofexamination"
+                    label="Date of examination"
+                    value={item.TOEFLExamForm.examdate || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "TOEFLExamForm", "examdate", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="TOEFLEUsername"
+                    label="Username"
+                    value={item.TOEFLExamForm.TOEFLEUsername || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "TOEFLExamForm", "TOEFLEUsername", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="TOEFLEPassword"
+                    label="Password"
+                    value={item.TOEFLExamForm.TOEFLEPassword || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "TOEFLExamForm", "TOEFLEPassword", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="TOEFLEReading"
+                    label="Reading"
+                    value={item.TOEFLExamForm.TOEFLEReading || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "TOEFLExamForm", "TOEFLEReading", e.target.value)
+                    }
+                  />
+                </Grid>
+                <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="TOEFLEistening"
+                    label="Listening"
+                    value={item.TOEFLExamForm.TOEFLEistening || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "TOEFLExamForm", "TOEFLEistening", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="TOEFLESpeaking"
+                    label="Speaking"
+                    value={item.TOEFLExamForm.TOEFLESpeaking || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "TOEFLExamForm", "TOEFLESpeaking", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="TOEFLEWriting"
+                    label="Writing"
+                    value={item.TOEFLExamForm.TOEFLEWriting || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "TOEFLExamForm", "TOEFLEWriting", e.target.value)
+                    }
+                  />
+                  <TextField
+                    disabled={!editMode}
+                    style={{ width: "100%", marginBottom: "20px" }}
+                    type="text"
+                    name="TOEFLETotal"
+                    label="Total"
+                    value={item.TOEFLExamForm.TOEFLETotal || ""}
+                    onChange={(e) =>
+                      handleInputChange(index, "TOEFLExamForm", "TOEFLETotal", e.target.value)
+                    }
+                  />
+                </Grid>
+              </Grid>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default Compatativepre;

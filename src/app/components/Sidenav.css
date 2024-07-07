@@ -1,0 +1,35 @@
+.submenu-root {
+    background: #abde81 !important;
+}
+
+.submenu-root:hover {
+    background: #ba2222 !important;
+}
+
+/* .submenu-root .pro-inner-list-item:hover {
+    background: #e43535 !important;
+} */
+
+.css-100k8ag>.ps-menu-button:hover {
+    background: none !important;
+}
+
+.css-1u4h8ia>.ps-menu-button:hover {
+    background: rgba(0, 0, 0, 0.289) !important;
+}
+
+.css-lq6dvs {
+    justify-content: center !important;
+}
+
+.sidemenucustom {
+    background-color: linear-gradient(to bottom, rgba(34, 42, 69, 0.96), rgba(34, 42, 69, 0.96));
+    height: 80%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.css-1wvake5 {
+    border-right-style: none !important;
+}
