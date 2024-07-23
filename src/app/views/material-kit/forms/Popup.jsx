@@ -38,10 +38,10 @@ function Popup(props) {
             >
                 <Box sx={style}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Null Values
+                        Fill required feild
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        If You Dont Have Any Input Field Please Type NA
+                        Please type 'NA' for the required feild, if no information to be filled
                     </Typography>
                 </Box>
             </Modal>}

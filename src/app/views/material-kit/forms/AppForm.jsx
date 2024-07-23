@@ -58,7 +58,6 @@ export default function AppForm() {
     <Container>
       <Box className="breadcrumb">
         <StepSlider />
-        {/* <Breadcrumb routeSegments={[{ name: "Material", path: "/material" }, { name: "Form" }]} /> */}
       </Box>
       <div
         style={{
@@ -104,7 +103,7 @@ export default function AppForm() {
       )}
       {!editpage && (
         <Stack>
-          <SimpleCard title="Universities And Courses You Desire">
+          <SimpleCard title="">
             <Persnoldetailspre userData={userData ? JSON.parse(JSON.parse(userData)) : []} formstatus={formstatus} />
           </SimpleCard>
         </Stack>

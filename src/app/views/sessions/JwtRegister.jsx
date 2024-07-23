@@ -1,12 +1,14 @@
 import { Formik } from "formik";
 import { useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { Card, Checkbox, Grid, TextField, useTheme, Box, styled } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
+import { Card, Checkbox, Grid, TextField, useTheme, Box, styled, Button } from "@mui/material";
+import { LoadingButton  } from "@mui/lab";
 import * as Yup from "yup";
-
+import { useAlert } from "react-alert";
 import useAuth from "app/hooks/useAuth";
 import { Paragraph } from "app/components/Typography";
+import { app, auth } from "../../../Firebase/firebase";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 // STYLED COMPONENTS
 const FlexBox = styled(Box)(() => ({
@@ -54,23 +56,33 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function JwtRegister() {
+    const alert = useAlert();
   const { id } = useParams();
-
+  const navigation = useNavigate();
   console.log("id", id);
   const theme = useTheme();
   const { register } = useAuth();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const handleFormSubmit = (values) => {
+  const handleFormSubmit = async(values) => {
     setLoading(true);
 
     try {
-      register(values.email, values.username, values.password);
-      navigate("/");
-      setLoading(false);
+      const res = await signInWithEmailAndPassword(auth, values.email, values.password);
+      console.log(res)
+      const user = res.user;
+      if (user.emailVerified) {
+        alert.success("Logged in successfully");
+        navigation("/student/dashboard/default");
+       
+      } else {
+        setLoading(false)
+        alert.error("Logged in failed");
+        await signOut(auth); // Sign out the user if email is not verified
+      }
     } catch (e) {
       console.log(e);
+      alert.error("Please try again");
       setLoading(false);
     }
   };
@@ -84,7 +96,7 @@ export default function JwtRegister() {
               <img
                 width="100%"
                 alt="Login"
-                src="/assets/images/logocolour-u508906.png"
+                src={`${process.env.PUBLIC_URL}/logocolour-u508906.png`}
               />
             </ContentBox>
           </Grid>
@@ -98,7 +110,7 @@ export default function JwtRegister() {
               >
                 {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
                   <form onSubmit={handleSubmit}>
-                    <TextField
+                    {/* <TextField
                       fullWidth
                       size="small"
                       type="text"
@@ -111,7 +123,7 @@ export default function JwtRegister() {
                       helperText={touched.username && errors.username}
                       error={Boolean(errors.username && touched.username)}
                       sx={{ mb: 3 }}
-                    />
+                    /> */}
 
                     <TextField
                       fullWidth
@@ -142,7 +154,7 @@ export default function JwtRegister() {
                       sx={{ mb: 2 }}
                     />
 
-                    <FlexBox gap={1} alignItems="center">
+                    {/* <FlexBox gap={1} alignItems="center">
                       <Checkbox
                         size="small"
                         name="remember"
@@ -154,9 +166,9 @@ export default function JwtRegister() {
                       <Paragraph fontSize={13}>
                         I have read and agree to the terms of service.
                       </Paragraph>
-                    </FlexBox>
+                    </FlexBox> */}
 
-                    <LoadingButton
+                    {/* <LoadingButton
                       type="submit"
                       color="primary"
                       loading={loading}
@@ -164,9 +176,15 @@ export default function JwtRegister() {
                       sx={{ mb: 2, mt: 3 }}
                     >
                       Register
-                    </LoadingButton>
+                    </LoadingButton> */}
+                    <Button
+                      variant="contained"
+                      type="submit"
+                    >
+                      Login
+                    </Button>
 
-                    <Paragraph>
+                    {/* <Paragraph>
                       Already have an account?
                       <NavLink
                         to="/student/session/signin/:id"
@@ -174,7 +192,7 @@ export default function JwtRegister() {
                       >
                         Login
                       </NavLink>
-                    </Paragraph>
+                    </Paragraph> */}
                   </form>
                 )}
               </Formik>

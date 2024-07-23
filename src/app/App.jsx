@@ -13,7 +13,17 @@ import { useEffect } from "react";
 import { persnoaldetails, pgform } from "Apis/Persnoldetailsform";
 import { app } from "../Firebase/firebase";
 import { useState } from "react";
+import { transitions, positions, Provider as AlertProvider } from 'react-alert';
+import AlertTemplate from 'react-alert-template-basic';
+
 export default function App() {
+  const options = {
+    position: positions.TOP_CENTER,
+    timeout: 5000,
+    offset: '30px',
+    transition: transitions.SCALE,
+  };
+  
   const check = async () => {
     // await app
     //   .auth()
@@ -65,6 +75,7 @@ export default function App() {
   // }, []);
 
   return (
+    <AlertProvider template={AlertTemplate} {...options}>
     <SettingsProvider>
       <AuthProvider>
         <MatxTheme>
@@ -72,6 +83,7 @@ export default function App() {
           {content}
         </MatxTheme>
       </AuthProvider>
-    </SettingsProvider>
+      </SettingsProvider>
+    </AlertProvider>
   );
 }

@@ -109,7 +109,7 @@ function Academicdetails() {
       </div>
       {editpage && (
         <Stack spacing={3}>
-          <SimpleCard title="Personnel Detail">
+          <SimpleCard title="Academic Detail">
             <AcademicForm userData={formstatus} />
           </SimpleCard>
         </Stack>

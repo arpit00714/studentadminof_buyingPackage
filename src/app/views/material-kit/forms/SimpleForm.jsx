@@ -153,8 +153,9 @@ const SimpleForm = (props) => {
 
   const [visitcountrybtn, setvisitcountryBtn] = useState(true);
   const handleAddvisitedCountry = () => {
+    
     setvisitcountryBtn(true);
-    if (wherecountyvisited !== "") {
+    if (wherecountyvisited) {
       SetCountoryVisited([
         ...getcountryVisited,
         {
@@ -188,12 +189,27 @@ const SimpleForm = (props) => {
     SetParentsList(updateparentslist);
   };
 
+  const handlesiblingList = (index) => {
+    const updateSiblingsList = [...SiblingsList];
+    updateSiblingsList.splice(index, 1);
+    SetSiblingsList(updateSiblingsList);
+  };
+  const image_validation = (type) => { 
+    if (type == 'image/jpeg' || type == 'image/png') {
+      return true;
+    } else {
+      alert("Please select only jpg,jpeg,png file")
+      return false;
+    }
+  }
   const onselectstudentimage = async (event) => {
-    const file = event.target.files[0]; // Get the first file selected
+    const file = event?.target?.files[0]; // Get the first file selected
+    const valid = image_validation(file?.type)
+    if (valid) { } else { setstudentimage(""); return; }
     const fd = new FormData();
     fd.append("student_image", file);
     const data = await filesupload(fd);
-    setFileValue("ancd")
+    // setFileValue("ancd")
     console.log("data", data);
     console.log("data[0].filename", data[0].filename);
     state.basicstudentimage = data[0].filename;
@@ -201,8 +217,8 @@ const SimpleForm = (props) => {
     const fileName = file.name; // Get the file name
     if (file) {
       const reader = new FileReader();
-      reader.onload = () => {
-        setstudentimage(reader.result);
+      reader.onload = (e) => {
+        setstudentimage(e.target.result);
       };
       reader.readAsDataURL(file);
     }
@@ -211,7 +227,9 @@ const SimpleForm = (props) => {
   };
 
   const Selectaadharcardimage = async (event) => {
-    const file = event.target.files[0];
+    const file = event?.target?.files[0]; // Get the first file selected
+    const valid = image_validation(file?.type)
+    if (valid) { } else { setaadharcardimage(""); return; }
     const fileName = file.name;
     const fd = new FormData();
     fd.append("student_adhar_image", file);
@@ -222,8 +240,8 @@ const SimpleForm = (props) => {
     setState({ ...state, [event.target.name]: event.target.value });
     if (file) {
       const reader = new FileReader();
-      reader.onload = () => {
-        setaadharcardimage(reader.result);
+      reader.onload = (e) => {
+        setaadharcardimage(e.target.result);
       };
       reader.readAsDataURL(file);
     }
@@ -232,7 +250,9 @@ const SimpleForm = (props) => {
   };
 
   const onchangebirthcertificate = async (event) => {
-    const file = event.target.files[0];
+    const file = event?.target?.files[0]; // Get the first file selected
+    const valid = image_validation(file?.type)
+    if (valid) { } else { setBIrthcertificate(""); return; }
     const fileName = file.name;
     const fd = new FormData();
     fd.append("birth_certificate", file);
@@ -243,8 +263,8 @@ const SimpleForm = (props) => {
     setState({ ...state, [event.target.name]: event.target.value });
     if (file) {
       const reader = new FileReader();
-      reader.onload = () => {
-        setBIrthcertificate(reader.result);
+      reader.onload = (e) => {
+        setBIrthcertificate(e.target.result);
       };
       reader.readAsDataURL(file);
     }
@@ -253,7 +273,9 @@ const SimpleForm = (props) => {
   };
 
   const onselectpassportfrontpage = async (event) => {
-    const file = event.target.files[0];
+    const file = event?.target?.files[0]; // Get the first file selected
+    const valid = image_validation(file?.type)
+    if (valid) { } else { setpassportfront(""); return; }
     const fileName = file.name;
     const fd = new FormData();
     fd.append("passport_front_image", file);
@@ -264,8 +286,8 @@ const SimpleForm = (props) => {
     setState({ ...state, [event.target.name]: event.target.value });
     if (file) {
       const reader = new FileReader();
-      reader.onload = () => {
-        setpassportfront(reader.result);
+      reader.onload = (e) => {
+        setpassportfront(e.target.result);
       };
       reader.readAsDataURL(file);
     }
@@ -274,7 +296,9 @@ const SimpleForm = (props) => {
   };
 
   const onselectpassportBackpage = async (event) => {
-    const file = event.target.files[0];
+    const file = event?.target?.files[0]; // Get the first file selected
+    const valid = image_validation(file?.type)
+    if (valid) { } else { setpassportback(""); return; }
     const fileName = file.name;
     const fd = new FormData();
     fd.append("passport_back_image", file);
@@ -285,8 +309,8 @@ const SimpleForm = (props) => {
     setState({ ...state, [event.target.name]: event.target.value });
     if (file) {
       const reader = new FileReader();
-      reader.onload = () => {
-        setpassportback(reader.result);
+      reader.onload = (e) => {
+        setpassportback(e.target.result);
       };
       reader.readAsDataURL(file);
     }
@@ -331,7 +355,7 @@ const SimpleForm = (props) => {
     }
   };
   const HandleAddmoreParents = () => {
-    if (parentsdetails !== "") {
+    if (parentsdetails) {
       SetParentsList([
         ...parentsList,
         {
@@ -383,7 +407,7 @@ const SimpleForm = (props) => {
     }
   };
   const handleAddmoreSiblings = () => {
-    if (nameofsibiling !== "") {
+    if (nameofsibiling) {
       SetSiblingsList([
         ...SiblingsList,
         {
@@ -538,8 +562,8 @@ const SimpleForm = (props) => {
         <ValidatorForm onSubmit={handleSubmit} onError={() => {
           setCommentBox(true)
         }} instantValidate>
-          <Grid></Grid>
-          <H3>Basis</H3>
+          <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
+          <H3>Basic</H3>
           <Grid container spacing={6}>
             <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
               <TextFieldValidator
@@ -569,17 +593,17 @@ const SimpleForm = (props) => {
                 inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }} // Add input mode and pattern
                 validators={["required", "isNumber"]} // Add a validator for checking if it's a number
                 errorMessages={["This field is required", "Must be a valid pincode"]}
-              />
-              student Image
-              <TextFieldValidator
-                type="file"
-                name="basicstudentimage1"
-                // label="student Image"
-                value={basicstudentimage1}
-                onChange={onselectstudentimage}
-                errorMessages={["this field is required"]}
-                validators={["required"]}
-              />
+                />
+                
+                
+                <div><div>Student image</div>
+                  <div> <input
+                    type="file"
+                    name="basicstudentimage1"
+                    onChange={onselectstudentimage}
+                    accept=".jpg, .jpeg, .png"
+                    required
+                  /></div></div>
               {studentimage && (
                 <img src={studentimage} alt="dvd" style={{ maxWidth: "100px", maxHeight: "100px" }} />
               )}
@@ -612,17 +636,18 @@ const SimpleForm = (props) => {
                 onChange={handleChange}
                 validators={["required"]}
                 errorMessages={["this field is required"]}
-              />
-              Aadhar Card Image
-              <TextFieldValidator
-                name="basicstuadharimage1"
-                value={basicstuadharimage1}
-                type="file"
-                // label="Aadhar Card Image"
-                onChange={Selectaadharcardimage}
-                errorMessages={["this field is required"]}
-                validators={["required"]}
-              />
+                />
+                <div>
+                  <div> Aadhar card image</div>
+                  <div><input
+                    type="file"
+                    name="basicstuadharimage1"
+                    onChange={Selectaadharcardimage}
+                    accept=".jpg, .jpeg, .png"
+                    required
+                  /></div>
+                </div>
+                
               {aadharcardimage && (
                 <img
                   src={aadharcardimage}
@@ -632,7 +657,9 @@ const SimpleForm = (props) => {
               )}
             </Grid>
           </Grid>
-          <Grid></Grid>
+          </div>
+         
+          <div style={{ border: "2px solid #00000080", padding: "20px", marginBottom: "20px" }}>
           <H3>Birth Detail</H3>
           <Grid container spacing={6}>
             <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
@@ -680,17 +707,16 @@ const SimpleForm = (props) => {
                 value={countyofbirth || ""}
                 errorMessages={["this field is required"]}
                 validators={["required"]}
-              />
-              Upload Birth certificate
-              <TextFieldValidator
-                name="birthcertificate1"
-                type="file"
-                value={birthcertificate1}
-                // label="Aadhar Card Image"
-                onChange={onchangebirthcertificate}
-                errorMessages={["this field is required"]}
-                validators={["required"]}
-              />
+                />
+                <div><div>Upload Birth certificate</div>
+                  <div><input
+                    type="file"
+                    name="birthcertificate1"
+                    onChange={onchangebirthcertificate}
+                    accept=".jpg, .jpeg, .png"
+                    required
+                  /></div></div>
+                
               {birthCertificate && (
                 <img
                   src={birthCertificate}
@@ -700,8 +726,10 @@ const SimpleForm = (props) => {
               )}
             </Grid>
           </Grid>
-          <Grid></Grid>
-          <H3>Passport and visa </H3>
+          </div>
+         
+          <div style={{ border: "2px solid #00000080", padding: "20px", marginBottom: "20px" }}>
+          <H3>Passport</H3>
           <Grid container spacing={6}>
             <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
               <TextFieldValidator
@@ -754,46 +782,46 @@ const SimpleForm = (props) => {
                 value={placeofissue || ""}
                 errorMessages={["this field is required"]}
                 validators={["required"]}
-              />
-              Upload front page of Passport
-              <TextFieldValidator
-                name="passportfrontimage1"
-                type="file"
-                value={passportfrontimage1}
-                // label="Aadhar Card Image" 
-                onChange={onselectpassportfrontpage}
-                errorMessages={["this field is required"]}
-                validators={["required"]}
-              />
+                />
+                <div> <div>Upload front page of Passport</div>
+                  <div> <input
+                    type="file"
+                    name="passportfrontimage1"
+                    onChange={onselectpassportfrontpage}
+                    accept=".jpg, .jpeg, .png"
+                    required
+                  /></div></div>
+               
               {passportfront && (
                 <img
                   src={passportfront}
                   alt="dvd"
                   style={{ maxWidth: "100px", maxHeight: "100px" }}
                 />
-              )}
-              Upload back page of Passport
-              <TextFieldValidator
-                name="passportbackimage1"
-                type="file"
-                value={passportbackimage1}
-                // label="Aadhar Card Image"
-                onChange={onselectpassportBackpage}
-                errorMessages={["this field is required"]}
-                validators={["required"]}
-              />
+                )}
+                <div><div>Upload back page of Passport</div>
+                  <div> <input
+                    type="file"
+                    name="passportbackimage1"
+                    onChange={onselectpassportBackpage}
+                    accept=".jpg, .jpeg, .png"
+                    required
+                  /></div></div>
+                
               {passportback && (
                 <img src={passportback} alt="dvd" style={{ maxWidth: "100px", maxHeight: "100px" }} />
               )}
             </Grid>
           </Grid>
-          <Grid></Grid>
-          <H3>visa </H3>
+          </div>
+          
+          <div style={{ border: "2px solid #00000080", padding: "20px", marginBottom: "20px" }}>
+          <H3>Visa</H3>
           <Grid container spacing={6}>
             <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
               <div>
                 {/* <H4>Have Your Visa got rejected</H4> */}
-                <FormLabel component="legend">Have Your Visa got rejected</FormLabel>
+                <FormLabel component="legend">Have your visa got rejected ? </FormLabel>
                 <RadioGroup
                   value={visastatus}
                   name="gender1"
@@ -838,7 +866,7 @@ const SimpleForm = (props) => {
           {visastatus === "no" && (
             <Grid container spacing={6}>
               <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
-                <FormLabel component="legend">Have you ever been to other country </FormLabel>
+                <FormLabel component="legend">Have you ever been to other country ? </FormLabel>
                 <RadioGroup
                   value={countryvisite}
                   name="gender1"
@@ -970,9 +998,10 @@ const SimpleForm = (props) => {
             </>
           )}
 
-          <Grid></Grid>
+          </div>
+          <div style={{ border: "2px solid #00000080", padding: "20px", marginBottom: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", height: "auto", }}>
-            <H3>Parents or guardian Details</H3>
+            <H3>Parents or Guardian Details</H3>
             <Button
               color="primary"
               variant="contained"
@@ -991,7 +1020,7 @@ const SimpleForm = (props) => {
                 container
                 spacing={6}
                 style={{
-                  borderBottom: "1px solid "
+                  marginBottom:100
                 }}
               >
                 <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
@@ -1146,6 +1175,21 @@ const SimpleForm = (props) => {
                     />
                   </LocalizationProvider>
                 </div>
+                Year of working ( since when )
+                <div style={datePickerStyles}>
+                  <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="en">
+                    <DatePicker
+                      onChange={(e) => {
+                        setState((pre) => ({
+                          ...pre,
+                          parentsyearofworkingsince: e.format("YYYY-MM-DD")
+                        }));
+                        console.log("rwe", e.format("YYYY-MM-DD"));
+                      }}
+                    // maxDate={yesterday}
+                    />
+                  </LocalizationProvider>
+                </div>
               </Grid>
               <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
                 <TextFieldValidator
@@ -1176,21 +1220,7 @@ const SimpleForm = (props) => {
                   value={professionofparents || ""}
                   onChange={handleChange}
                 />
-                Year of working ( since when )
-                <div style={datePickerStyles}>
-                  <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="en">
-                    <DatePicker
-                      onChange={(e) => {
-                        setState((pre) => ({
-                          ...pre,
-                          parentsyearofworkingsince: e.format("YYYY-MM-DD")
-                        }));
-                        console.log("rwe", e.format("YYYY-MM-DD"));
-                      }}
-                    // maxDate={yesterday}
-                    />
-                  </LocalizationProvider>
-                </div>
+                
               </Grid>
             </Grid>
           )}
@@ -1218,8 +1248,10 @@ const SimpleForm = (props) => {
             )} */}
 
 
-          </div>
+            </div>
+            </div>
 
+          <div style={{ border: "2px solid #00000080", padding: "20px", marginBottom: "20px" }}>
           <FormLabel component="legend">Do You Have Siblings ?</FormLabel>
           <RadioGroup
             value={havesiblng}
@@ -1251,7 +1283,7 @@ const SimpleForm = (props) => {
 
               {SiblingsList.map((item, key) => {
                 return (
-                  <Grid key={key} container spacing={6}>
+                  <Grid style={{marginBottom:100}} key={key} container spacing={6}>
                     <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
                       <TextFieldValidator
                         disabled={true}
@@ -1291,6 +1323,13 @@ const SimpleForm = (props) => {
                         label="Which country is he /she now "
                         value={item.countryofsibling || ""}
                       />
+                      <div style={{ cursor: "pointer" }}>
+                        <DeleteIcon
+                          onClick={() => {
+                            handlesiblingList(key);
+                          }}
+                        />
+                      </div>
                     </Grid>
                   </Grid>
                 );
@@ -1338,26 +1377,7 @@ const SimpleForm = (props) => {
                       validators={["required"]}
                       errorMessages={["this field is required", "address is not valid"]}
                     />
-                    Date of Birth
-                    <div style={datePickerStyles}>
-                      <LocalizationProvider Provider
-                        dateAdapter={AdapterMoment} adapterLocale="en"
-                        validators={["required"]}
-                        errorMessages={["this field is required"]}
-                      >
-                        <DatePicker
-                          onChange={(e) => {
-                            console.log("rwe", e.format("YYYY-MM-DD"));
-                            setState((pre) => ({
-                              ...pre,
-                              dobofsibling: e.format("YYYY-MM-DD")
-                            }));
-                          }}
-
-                        // maxDate={yesterday}
-                        />
-                      </LocalizationProvider>
-                    </div>
+                   
                     <TextFieldValidator
                       type="text"
                       name="countryofsibling"
@@ -1366,8 +1386,29 @@ const SimpleForm = (props) => {
                       onChange={handleChange}
                       validators={["required"]}
                       errorMessages={["this field is required"]}
-                    />
-                  </Grid>
+                      />
+                      Date of Birth
+                      <div style={datePickerStyles}>
+                        <LocalizationProvider Provider
+                          dateAdapter={AdapterMoment} adapterLocale="en"
+                          validators={["required"]}
+                          errorMessages={["this field is required"]}
+                        >
+                          <DatePicker
+                            onChange={(e) => {
+                              console.log("rwe", e.format("YYYY-MM-DD"));
+                              setState((pre) => ({
+                                ...pre,
+                                dobofsibling: e.format("YYYY-MM-DD")
+                              }));
+                            }}
+
+                          // maxDate={yesterday}
+                          />
+                        </LocalizationProvider>
+                      </div>
+                    </Grid>
+                    
                 </Grid>
               )}
 
@@ -1409,7 +1450,8 @@ const SimpleForm = (props) => {
               </Button>
             </div> */}
             </div>
-          )}
+            )}
+            </div>
           {!isFormFiled && (
             <div
               style={{

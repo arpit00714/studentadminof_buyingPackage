@@ -23,7 +23,7 @@ import { NotificationBar } from "app/components/NotificationBar";
 import { themeShadows } from "app/components/MatxTheme/themeColors";
 
 import { topBarHeight } from "app/utils/constant";
-
+import {  useNavigate } from "react-router-dom";
 import {
   Home,
   Menu,
@@ -38,7 +38,12 @@ import {
 import FeedIcon from '@mui/icons-material/Feed';
 import { useState } from "react";
 import { useEffect } from "react";
-import { app } from "../../../../Firebase/firebase";
+import { app,auth } from "../../../../Firebase/firebase";
+import {
+  signOut,
+} from "firebase/auth";
+
+
 
 // STYLED COMPONENTS
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
@@ -94,6 +99,7 @@ const IconBox = styled("div")(({ theme }) => ({
 }));
 
 const Layout1Topbar = () => {
+  const navigation = useNavigate();
   const [user, setUser] = useState(null);
   useEffect(() => {
     app.auth().onAuthStateChanged((user) => {
@@ -104,7 +110,7 @@ const Layout1Topbar = () => {
 
   const theme = useTheme();
   const { settings, updateSettings } = useSettings();
-  const { logout, users } = useAuth();
+  // const { logout, users } = useAuth();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const updateSidebarMode = (sidebarSettings) => {
@@ -122,6 +128,10 @@ const Layout1Topbar = () => {
     updateSidebarMode({ mode });
   };
 
+  const logout = async() => { 
+    await signOut(auth);
+    navigation('/student/session/signup')
+  }
   return (
     <TopbarRoot>
       <TopbarContainer>
@@ -173,26 +183,27 @@ const Layout1Topbar = () => {
               </Link>
             </StyledItem>
 
-            <StyledItem>
+            {/* <StyledItem>
               <Link to="/student/page-layouts/user-profile">
                 <Person />
                 <Span>Profile</Span>
               </Link>
-            </StyledItem>
+            </StyledItem> */}
 
-            <StyledItem>
+            {/* <StyledItem>
               <Settings />
               <Span>Settings</Span>
-            </StyledItem>
+            </StyledItem> */}
 
             <StyledItem >
               <FeedIcon />
               <Span><Link to="/student/material/Studentpackage">Packages</Link></Span>
             </StyledItem>
-            {/* <StyledItem onClick={logout}>
+            
+            <StyledItem onClick={logout}>
               <PowerSettingsNew />
               <Span>Logout</Span>
-            </StyledItem> */}
+            </StyledItem>
           </MatxMenu>
         </Box>
       </TopbarContainer>
