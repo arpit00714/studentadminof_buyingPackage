@@ -79,11 +79,7 @@ function Presnolquestionpre(props) {
         <Button variant="contained" color="primary" onClick={toggleEdit}>
           {editable ? "Cancel" : "Edit"}
         </Button>
-        {editable && (
-          <Button variant="contained" color="secondary" onClick={handleSubmit}>
-            Submit
-          </Button>
-        )}
+       
       </div>}
 
       {formData?.map((item, index) => (
@@ -183,6 +179,11 @@ function Presnolquestionpre(props) {
           </Grid>
         </Grid>
       ))}
+       {editable && (
+          <Button variant="contained" color="secondary" onClick={handleSubmit}>
+            Save
+          </Button>
+        )}
 
       <Dialog
         open={open}

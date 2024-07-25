@@ -1030,7 +1030,7 @@ function AcademicForm() {
       <ValidatorForm onSubmit={handleSubmit} onError={() => {
         setCommentBox(true)
       }}>
-        <Grid></Grid>
+        <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
         <H3>School</H3>
         <Grid container spacing={6}>
           <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
@@ -1181,7 +1181,7 @@ function AcademicForm() {
               value={hscyear || ""}
               validators={["required"]}
               errorMessages={["this field is required"]}
-            /> */}
+              /> */}
             Hsc Marksheet
             <TextField type="file" name="hscmarksheet1" value={hscmarksheet1} onChange={onselectHscmarksheet} errorMessages={["this field is required"]}
               validators={["required"]} />
@@ -1190,8 +1190,11 @@ function AcademicForm() {
             )}
           </Grid>
         </Grid>
-
+        </div>
+        
         <Grid></Grid>
+        <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
+
         <H3>Undergraduation </H3>
         <Grid container spacing={6}>
           <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
@@ -1383,7 +1386,9 @@ function AcademicForm() {
             )}
           </Grid>
         </Grid>
-
+        </div>
+   
+        <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
         <Grid style={{ marginTop: "20px" }}></Grid>
         <H3>Post graduation</H3>
         <Grid container spacing={6}>
@@ -1576,7 +1581,9 @@ function AcademicForm() {
             )}
           </Grid>
         </Grid>
+       </div>
 
+       <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
         <Grid style={{ marginTop: "20px" }}></Grid>
         <div style={{ display: "flex", alignItems: "center" }}>
           <H3>Specialized Courses Undertaken</H3>
@@ -1586,7 +1593,6 @@ function AcademicForm() {
               <Span sx={{ pl: 1, textTransform: "capitalize" }}>Add More</Span>
             </Button>
           }
-
         </div>
 
         <Grid container spacing={6}>
@@ -1795,26 +1801,26 @@ function AcademicForm() {
                     value={item || ""}
                     validators={["required"]}
                     errorMessages={["this field is required"]}
-                  />
+                    />
                   <DeleteIcon
                     onClick={() => {
                       handlesportsDelete(key);
                     }}
-                  />
+                    />
                 </Grid>
               );
             })}
             {sportsbtn && (
               <TextField
-                type="text"
-                name="addsportsactivity"
-                label="Sport Activity "
-                onChange={(e) => {
-                  setaddSportsactivity(e.target.value);
-                }}
-                value={addsportsactivity || ""}
-                validators={["required"]}
-                errorMessages={["this field is required"]}
+              type="text"
+              name="addsportsactivity"
+              label="Sport Activity "
+              onChange={(e) => {
+                setaddSportsactivity(e.target.value);
+              }}
+              value={addsportsactivity || ""}
+              validators={["required"]}
+              errorMessages={["this field is required"]}
               />
             )}
 
@@ -1822,19 +1828,21 @@ function AcademicForm() {
 
               {/* {addsportsactivity !== "" && (
                 <Button
-                  style={{ marginLeft: "20px" }}
-                  onClick={handledonesportsactivity}
-                  color="primary"
-                  variant="contained"
+                style={{ marginLeft: "20px" }}
+                onClick={handledonesportsactivity}
+                color="primary"
+                variant="contained"
                 >
-                  <Icon>done</Icon>
-                  <Span sx={{ pl: 1, textTransform: "capitalize" }}>Save</Span>
+                <Icon>done</Icon>
+                <Span sx={{ pl: 1, textTransform: "capitalize" }}>Save</Span>
                 </Button>
-              )} */}
+                )} */}
             </div>
           </Grid>
         </Grid>
+        </div>
 
+        <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
         <div style={{ margin: "20px 0px" }}>
           <Grid style={{ marginTop: "20px" }}></Grid>
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -2089,6 +2097,9 @@ function AcademicForm() {
           )}
 
         </div>
+        </div>
+
+        <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <H3>Presentation</H3>
           {Presentationtitle !== "" &&
@@ -2213,8 +2224,9 @@ function AcademicForm() {
           </div>
         }
 
+       </div>
 
-
+       <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
         <div style={{ margin: "20px 0px" }}>
 
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -2364,7 +2376,9 @@ function AcademicForm() {
           </div>
 
         </div>
+        </div>
 
+        <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
         <Grid></Grid>
         <div style={{ display: "flex", alignItems: "center" }}>
           <H3>Honours And Achievements</H3>
@@ -2517,8 +2531,9 @@ function AcademicForm() {
             <Span sx={{ pl: 1, textTransform: "capitalize" }}>Save</Span>
           </Button> */}
         </div>
+        </div>
 
-
+        <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
         <div style={{ margin: "20px 0px" }}>
 
           <Grid></Grid>
@@ -2698,7 +2713,7 @@ function AcademicForm() {
           </div>
 
         </div>
-
+      </div>
         <div
           style={{
             width: "100%",

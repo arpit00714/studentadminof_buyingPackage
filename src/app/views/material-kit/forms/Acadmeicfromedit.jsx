@@ -374,13 +374,10 @@ function Acadmeicfromedit(props) {
                 <Button color="primary" variant="contained" onClick={() => setEditPage(!editpage)}>
                     {editpage ? "Cancel" : "Edit"}
                 </Button>
-                {editpage && (
-                    <Button color="secondary" variant="contained" onClick={handleSave}>
-                        Save
-                    </Button>
-                )}
+               
             </div>}
-
+             <br />
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <SimpleCard title="School">
                 <Grid></Grid>
                 <Grid container spacing={6}>
@@ -512,7 +509,9 @@ function Acadmeicfromedit(props) {
 
             </SimpleCard>
 
+            </div>
 
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <div style={{ margin: "20px 0px" }}>
                 <SimpleCard title="Under Gradution">
                     <Grid container spacing={6}>
@@ -645,7 +644,9 @@ function Acadmeicfromedit(props) {
                     </Grid>
                 </SimpleCard>
             </div>
+            </div>
 
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <div style={{ margin: "20px 0px" }}>
                 <SimpleCard title="Post Gradution">
                     <Grid container spacing={6}>
@@ -765,14 +766,13 @@ function Acadmeicfromedit(props) {
                                         <img src={postgradutionprovisinoal} alt="Student" style={{ maxWidth: "100px", maxHeight: "100px" }} />
                                     )}</div>
                             }
-
-
-
                         </Grid>
                     </Grid>
                 </SimpleCard>
             </div>
+            </div>
 
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <div style={{ margin: "20px 0px" }}>
                 <SimpleCard title="special Course">
                     <Grid container spacing={6}>
@@ -786,7 +786,9 @@ function Acadmeicfromedit(props) {
                     </Grid>
                 </SimpleCard>
             </div>
+            </div>
 
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <div style={{ margin: "20px 0px" }}>
                 <SimpleCard title="SoftWare Used">
                     <Grid container spacing={6}>
@@ -800,7 +802,9 @@ function Acadmeicfromedit(props) {
                     </Grid>
                 </SimpleCard>
             </div>
+            </div>
 
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <div style={{ margin: "20px 0px" }}>
                 <SimpleCard title="Sports Activity">
                     <Grid container spacing={6}>
@@ -814,7 +818,9 @@ function Acadmeicfromedit(props) {
                     </Grid>
                 </SimpleCard>
             </div>
+            </div>
 
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <div style={{ margin: "20px 0px" }}>
                 <SimpleCard title="Computer Langauge Known">
                     <Grid container spacing={6}>
@@ -828,7 +834,9 @@ function Acadmeicfromedit(props) {
                     </Grid>
                 </SimpleCard>
             </div>
+            </div>
 
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <div style={{ margin: "20px 0px" }}>
                 <SimpleCard title="Acadmic Assesmint">
                     {Acadmicassesmint?.map((item, key) => {
@@ -893,7 +901,9 @@ function Acadmeicfromedit(props) {
                     })}
                 </SimpleCard>
             </div>
+            </div>
 
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <div style={{ margin: "20px 0px" }}>
                 <SimpleCard title="Presentation">
                     {presentionData?.map((item, key) => {
@@ -932,7 +942,9 @@ function Acadmeicfromedit(props) {
                     })}
                 </SimpleCard>
             </div>
+            </div>
 
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <div style={{ margin: "20px 0px" }}>
                 <SimpleCard title="Journals/Publication">
                     {editpage ? (
@@ -987,6 +999,9 @@ function Acadmeicfromedit(props) {
                     })}
                 </SimpleCard>
             </div>
+            </div>
+
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <SimpleCard title="Honours And Achievements">
                 {honorsData?.map((item, key) => {
                     return (
@@ -1031,6 +1046,9 @@ function Acadmeicfromedit(props) {
                     );
                 })}
             </SimpleCard>
+            </div>
+
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <div style={{ margin: "20px 0px" }}>
                 <SimpleCard title="Member Of Organization">
                     {organizationData?.map((item, key) => {
@@ -1085,7 +1103,12 @@ function Acadmeicfromedit(props) {
                     })}
                 </SimpleCard>
             </div>
-
+            </div>
+            {editpage && (
+                    <Button color="secondary" variant="contained" onClick={handleSave}>
+                        Save
+                    </Button>
+                )}
             {/* <Dialog
                 open={open}
                 // onClose={handleClose}

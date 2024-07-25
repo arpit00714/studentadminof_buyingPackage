@@ -54,6 +54,7 @@ function DesireCource() {
 
   return (
     <div>
+       <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
       <Container>
         <Box className="breadcrumb">
           <StepSlider />
@@ -61,7 +62,7 @@ function DesireCource() {
             routeSegments={[{ name: "PG FRESHER", path: "/material" }, { name: "DesireCource" }]}
           /> */}
         </Box>
-        <div
+        {/* <div
           style={{
             width: "100%",
             display: "flex",
@@ -97,7 +98,7 @@ function DesireCource() {
               <Span sx={{ pl: 1, textTransform: "capitalize" }}>Preview</Span>
             </Button>
           )}
-        </div>
+        </div> */}
         {editpage && (
           <Stack spacing={3}>
 
@@ -113,6 +114,7 @@ function DesireCource() {
         )}
       </Container>
     </div>
+      </div>
   );
 }
 

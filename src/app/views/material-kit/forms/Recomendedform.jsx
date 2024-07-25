@@ -131,8 +131,6 @@ function Recomendedform(props) {
         setRecemenderform({});
       }
     }
-
-
   };
 
   const handleasaverecomendation = () => {
@@ -180,7 +178,6 @@ function Recomendedform(props) {
         console.log(err);
       }
     }
-
   };
 
   const handleClose = async () => {
@@ -203,6 +200,7 @@ function Recomendedform(props) {
 
   return (
     <div>
+       <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
       <div>
         {recomenderlist?.map((item, key) => {
           return (
@@ -528,6 +526,7 @@ function Recomendedform(props) {
           </DialogActions>
         </Dialog>
       )}
+      </div>
     </div>
   );
 }

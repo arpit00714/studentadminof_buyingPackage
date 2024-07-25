@@ -69,8 +69,6 @@ const style = {
 };
 
 
-
-
 function Desirecousrepre(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -137,6 +135,7 @@ function Desirecousrepre(props) {
     }
   }
   return (
+    <>
     <div>
       {!formstatus && <div>
         <Button variant="contained" color="primary" onClick={() => {
@@ -144,13 +143,11 @@ function Desirecousrepre(props) {
         }}>
           Edit
         </Button>
-        {editpage && (
-          <Button variant="contained" color="secondary" onClick={handleEditSubmit}>
-            Submit
-          </Button>
-        )}
+        
       </div>}
-
+     <br />
+     
+      <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
       {editableData.map((item, key) => (
         <div
           key={key}
@@ -207,7 +204,7 @@ function Desirecousrepre(props) {
                 onChange={(e) => handleInputChange(key, "universityName", e.target.value)}
               />
 
-
+             
               <TextField
                 style={{ width: "100%", marginBottom: "16px" }}
                 type="text"
@@ -251,9 +248,15 @@ function Desirecousrepre(props) {
 
         </div>
       ))}
+      </div>
       {/* <Button style={{ marginTop: "20px" }} color="primary" variant="contained" onClick={() => {
         handleEditSubmit()
       }}>Submit</Button> */}
+      {editpage && (
+          <Button variant="contained" color="secondary" onClick={handleEditSubmit}>
+            Save
+          </Button>
+        )}
 
 
       {formstatus && <Dialog
@@ -290,6 +293,7 @@ function Desirecousrepre(props) {
         </DialogActions>
       </Dialog>
     </div>
+</>
   );
 }
 

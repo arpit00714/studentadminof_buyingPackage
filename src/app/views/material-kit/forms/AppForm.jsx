@@ -59,7 +59,7 @@ export default function AppForm() {
       <Box className="breadcrumb">
         <StepSlider />
       </Box>
-      <div
+      {/* <div
         style={{
           width: "100%",
           display: "flex",
@@ -77,11 +77,11 @@ export default function AppForm() {
             }}
           >
             {/* <Icon>back</Icon> */}
-            <Span sx={{ pl: 1, textTransform: "capitalize" }}>Back</Span>
+            {/* <Span sx={{ pl: 1, textTransform: "capitalize" }}>Back</Span>
           </Button>
-        )}
+        )} */}
 
-        {userData !== null && (
+        {/* {userData !== null && (
           <Button
             style={{ marginLeft: "20px" }}
             color="primary"
@@ -95,7 +95,7 @@ export default function AppForm() {
             <Span sx={{ pl: 1, textTransform: "capitalize" }}>Preview</Span>
           </Button>
         )}
-      </div>
+      </div> */} 
       {editpage && (
         <Stack spacing={3}>
           <SimpleForm userData={formstatus} />

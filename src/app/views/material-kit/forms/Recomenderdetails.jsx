@@ -58,7 +58,7 @@ function Recomenderdetails() {
       <Box className="breadcrumb">
         <StepSlider />
       </Box>
-      <div
+      {/* <div
         style={{
           width: "100%",
           display: "flex",
@@ -94,7 +94,7 @@ function Recomenderdetails() {
             <Span sx={{ pl: 1, textTransform: "capitalize" }}>Preview</Span>
           </Button>
         )}
-      </div>
+      </div> */}
       {editpage && (
         <Stack spacing={3}>
           <SimpleCard title="Recommender Details">

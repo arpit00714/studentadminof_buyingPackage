@@ -377,6 +377,7 @@ function CompatativeForm() {
 
   return (
     <div>
+       <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
       {compatativeExamList.map((item, key) => {
         return (
           <div key={key}>
@@ -1154,30 +1155,30 @@ function CompatativeForm() {
 
         <div
           style={{ width: "100%", display: "flex", justifyContent: "center", margin: "20px 0px" }}
-        >
+          >
 
           {/* {!donebtn && (
             <Button
-
-              color="primary"
-              variant="contained"
-              onClick={HandlDoneExams}
+            
+            color="primary"
+            variant="contained"
+            onClick={HandlDoneExams}
             >
-              <Icon>done</Icon>
-              <Span sx={{ pl: 1, textTransform: "capitalize" }}>Save</Span>
+            <Icon>done</Icon>
+            <Span sx={{ pl: 1, textTransform: "capitalize" }}>Save</Span>
             </Button>
-          )} */}
+            )} */}
         </div>
         <div
           style={{ width: "80%", display: "flex", justifyContent: "center", margin: "40px auto" }}
-        >
+          >
           <Button color="primary" variant="contained" type="submit">
             <Span sx={{ pl: 1, textTransform: "capitalize" }}>Next & Continue</Span>
             <Icon>navigate_next</Icon>
           </Button>
         </div>
-
       </ValidatorForm>
+          </div>
 
       <Dialog
         open={open}

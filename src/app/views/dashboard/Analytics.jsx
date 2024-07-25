@@ -88,7 +88,6 @@ export default function Analytics() {
       <div style={{ width: "100%" }}>
         <StepSlider />
       </div>
-
     </div>
   );
 }

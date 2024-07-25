@@ -1,14 +1,22 @@
 import React, { useState } from "react";
-import { H3 } from "app/components/Typography";
+import { H3,Span } from "app/components/Typography";
 import moment from "moment";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { TextField, Button, Grid, styled, DialogTitle } from "@mui/material";
 import apiUrl from "URLS/ApiUrl";
 import { filesupload } from "Apis/filesupload";
 import { persnoaldetailsupdate } from "Apis/Persnoldetailsform";
-
+import {
+  Checkbox,
+  FormControlLabel,
+  FormLabel,
+  Icon,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
 const TextFieldValidator = styled(TextField)(() => ({
   width: "100%",
   marginBottom: "16px"
@@ -16,7 +24,8 @@ const TextFieldValidator = styled(TextField)(() => ({
 
 function Persnoldetailspre(props) {
   const initialData = props.userData[0];
-
+  const [parentsList, SetParentsList] = useState([]);
+  const [state, setState] = useState({ date: new Date() });
   const countryvisitData = {
     visa: {
       isvisarejected: 'no',
@@ -60,6 +69,56 @@ function Persnoldetailspre(props) {
   const [studentImageAdhar, setStudentImageAdhar] = useState("");
   const [studentbirthcertificate, StudentbirthCertificate] = useState("");
   const [userVisa, SetUserVisa] = useState(visa)
+  // add
+  const [showparentmore, setShowparentaddmore] = useState(true);
+  // 
+  const {
+    address,
+    firstName,
+    city,
+    selectedstate,
+    Country,
+    pincode,
+    basicstudentimage,
+    basicstudentimage1,
+    basicstuadharimage,
+    basicstuadharimage1,
+    dateofbirth,
+    cityofbirth,
+    stateofbirth,
+    countyofbirth,
+    birthcertificate,
+    birthcertificate1,
+    PassportNumber,
+    placeofissue,
+    passportrejectionreason,
+    passportfrontimage,
+    passportfrontimage1,
+    passportbackimage,
+    passportbackimage1,
+    wherecountyvisited,
+    parentrelation,
+    emailofparents,
+    phonenumberofparents,
+    levelofeducation,
+    degreename,
+    universityname,
+    professionofparents,
+    Designation,
+    nameofsibiling,
+    relationwithsibling,
+    educationlevelofsibling,
+    universityofsibling,
+    countryofsibling
+  } = state;
+
+
+  const handleparentsList = (index) => {
+    const updateparentslist = [...parentsList];
+    updateparentslist.splice(index, 1);
+    SetParentsList(updateparentslist);
+  };
+  // 
 
   console.log("countryvisitdata", countryvisitdata)
   if (props.userData.length === 0) {
@@ -113,7 +172,70 @@ function Persnoldetailspre(props) {
     }
   };
   console.log("countryvisitdata", countryvisitdata)
+   
+  // addmore form
+  const HandleAddParents = () => {
+    if (parentsdetails !== "") {
+      SetParentsList([
+        ...parentsList,
+        {
+          parentsdetails,
+          parentrelation,
+          emailofparents,
+          phonenumberofparents,
+          levelofeducation,
+          degreename,
+          universityname,
+          Designation,
+          yearofworking: state.parentsyearofworkingsince,
+          yearofpassing: state.parentsyearofpassing,
+          professionofparents
+        }
+      ]);
+      state.parentsdetails = "";
+      state.parentrelation = "";
+      state.emailofparents = "";
+      state.phonenumberofparents = "";
+      state.levelofeducation = "";
+      state.degreename = "";
+      state.universityname = "";
+      state.Designation = "";
+      state.professionofparents = "";
+      setShowparentaddmore(false);
+    }
+  };
 
+  const HandleAddmoreParents = () => {
+    if (parentsdetails) {
+      SetParentsList([
+        ...parentsList,
+        {
+          parentsdetails,
+          parentrelation,
+          emailofparents,
+          phonenumberofparents,
+          levelofeducation,
+          degreename,
+          universityname,
+          Designation,
+          yearofworking: state.parentsyearofworkingsince,
+          yearofpassing: state.parentsyearofpassing,
+          professionofparents
+        }
+      ]);
+      state.parentsdetails = "";
+      state.parentrelation = "";
+      state.emailofparents = "";
+      state.phonenumberofparents = "";
+      state.levelofeducation = "";
+      state.degreename = "";
+      state.universityname = "";
+      state.Designation = "";
+      state.professionofparents = "";
+    }
+    setShowparentaddmore(true);
+  };
+  // 
   const handlestudentbasicimg = async (event) => {
     const file = event.target.files[0]; // Get the first file selected
     const fd = new FormData();
@@ -309,14 +431,10 @@ function Persnoldetailspre(props) {
         <Button color="primary" variant="contained" onClick={() => setEditPage(!editpage)}>
           {editpage ? "Cancel" : "Edit"}
         </Button>
-        {editpage && (
-          <Button color="secondary" variant="contained" onClick={handleSave}>
-            Save
-          </Button>
-        )}
-      </div>}
-
-
+        </div>}
+        
+      <br />
+        <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
 
       <H3>Basic Details</H3>
       <Grid container spacing={6}>
@@ -406,7 +524,9 @@ function Persnoldetailspre(props) {
           </div>
         </Grid>
       </Grid>
-
+          </div>
+       
+        <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
       <H3>Birth Details</H3>
       <Grid container spacing={6}>
         <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
@@ -463,7 +583,9 @@ function Persnoldetailspre(props) {
           </div>
         </Grid>
       </Grid>
-
+          </div>
+      
+          <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
       <H3>Passport & Visa</H3>
       <Grid container spacing={6}>
         <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
@@ -659,9 +781,21 @@ function Persnoldetailspre(props) {
           </>
         )
       }
+      </div>
 
-
-      <H3>Parents Details</H3>
+      <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
+      <div style={{ display: "flex", alignItems: "center", height: "auto", }}>
+            <H3>Parents or Guardian Details</H3>
+            <Button
+              color="primary"
+              variant="contained"
+              style={{ marginLeft: "20px" }}
+              onClick={HandleAddmoreParents}
+            >
+              <Icon>add</Icon>
+              <Span sx={{ pl: 1, textTransform: "capitalize" }}>Add More</Span>
+            </Button>
+          </div>
 
       {console.log("parentsDetails", parentsDetails)}
       {parentsDetails?.map((item, key) => {
@@ -752,11 +886,20 @@ function Persnoldetailspre(props) {
                 disabled={!editpage}
                 onChange={(e) => handleInputChange("parents", key, "yearofworking", e.target.value)}
               />
+              <div style={{ cursor: "pointer" }}>
+                    <DeleteIcon
+                      onClick={() => {
+                        handleparentsList(key);
+                      }}
+                    />
+                  </div>
             </Grid>
           </Grid>
         )
       })}
-
+     </div>
+ 
+     <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
       {console.log("siblingsList", siblingsList)}
       {havesibling && <H3>Sibling Details</H3>}
 
@@ -845,6 +988,12 @@ function Persnoldetailspre(props) {
           </DialogActions>
         </Dialog>
       )}
+    </div>
+    {editpage && (
+    <Button color="secondary" variant="contained" onClick={handleSave}>
+      Save
+    </Button>
+  )}
     </div>
   );
 }

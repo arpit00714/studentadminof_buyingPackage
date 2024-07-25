@@ -49,11 +49,7 @@ function Compatativepre(props) {
         <Button variant="contained" color="primary" onClick={handleEditClick}>
           Edit
         </Button>
-        {editMode && (
-          <Button variant="contained" color="secondary" onClick={handleSubmit}>
-            Submit
-          </Button>
-        )}
+        
       </div>}
 
       {compatativeExamList.map((item, index) => (
@@ -456,7 +452,11 @@ function Compatativepre(props) {
           )}
         </div>
       ))}
-
+     {editMode && (
+          <Button variant="contained" color="secondary" onClick={handleSubmit}>
+            Submit
+          </Button>
+        )}
 
       <Dialog
         open={open}

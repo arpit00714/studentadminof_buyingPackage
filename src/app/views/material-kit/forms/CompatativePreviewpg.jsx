@@ -44,18 +44,17 @@ function Compatativepre(props) {
     window.location.reload();
   }
   return (
-    <div>
+    <div> 
+
       {!formstatus && <div>
         <Button variant="contained" color="primary" onClick={handleEditClick}>
           Edit
         </Button>
-        {editMode && (
-          <Button variant="contained" color="secondary" onClick={handleSubmit}>
-            Submit
-          </Button>
-        )}
+       
       </div>}
+      <br />
 
+            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
       {compatativeExamList.map((item, index) => (
         <div key={index}>
           {item?.GreExamForm && (
@@ -445,6 +444,12 @@ function Compatativepre(props) {
           )}
         </div>
       ))}
+      </div>
+       {editMode && (
+          <Button variant="contained" color="secondary" onClick={handleSubmit}>
+            Save
+          </Button>
+        )}
       <Dialog
         open={open}
         // onClose={handleClose}
@@ -457,7 +462,7 @@ function Compatativepre(props) {
           <Button onClick={handleClose}>OK</Button>
         </DialogActions>
       </Dialog>
-
+       
 
 
       {formstatus && <Dialog

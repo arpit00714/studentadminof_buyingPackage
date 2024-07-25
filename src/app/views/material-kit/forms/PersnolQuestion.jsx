@@ -67,7 +67,7 @@ function PersnolQuestion() {
             ]}
           /> */}
         </Box>
-        <div
+        {/* <div
           style={{
             width: "100%",
             display: "flex",
@@ -103,7 +103,7 @@ function PersnolQuestion() {
               <Span sx={{ pl: 1, textTransform: "capitalize" }}>Preview</Span>
             </Button>
           )}
-        </div>
+        </div> */}
         {editpage && (
           <Stack spacing={3}>
             <SimpleCard title="Personel Questions">

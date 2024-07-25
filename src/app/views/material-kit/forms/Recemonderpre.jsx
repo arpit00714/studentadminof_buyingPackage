@@ -121,11 +121,7 @@ function Recemonderpre(props) {
           }}>
             Edit
           </Button>
-          {editpage && (
-            <Button variant="contained" color="secondary" onClick={handleEditSubmit}>
-              Submit
-            </Button>
-          )}
+          
         </div>
       }
 
@@ -134,6 +130,7 @@ function Recemonderpre(props) {
       {editableData?.map((item, key) => {
         return (
           <div key={key} style={{ padding: "15px 15px", borderBottom: "1px solid" }}>
+             <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
             <Grid></Grid>
             <H3>{item.typeofrecemonder}</H3>
             <Grid container spacing={6}>
@@ -230,6 +227,12 @@ function Recemonderpre(props) {
                 />
               </Grid>
             </Grid>
+            </div>
+          {editpage && (
+            <Button variant="contained" color="secondary" onClick={handleEditSubmit}>
+              Save
+            </Button>
+          )}
           </div>
         );
       })}

@@ -84,7 +84,7 @@ function Academicdetails() {
 
       </Stack> */}
 
-      <div
+      {/* <div
         style={{
           width: "100%",
           display: "flex",
@@ -120,7 +120,7 @@ function Academicdetails() {
             <Span sx={{ pl: 1, textTransform: "capitalize" }}>Preview</Span>
           </Button>
         )}
-      </div>
+      </div> */}
       {console.log("examType", examType)}
       {editpage && (
         <Stack spacing={3}>

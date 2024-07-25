@@ -130,7 +130,7 @@ function DesireCourseform(props) {
 
   return (
     <div>
-
+     <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
       {showndesirecourese.map((item, key) => (
         <div key={key} style={{ position: 'relative', height: '350px', marginTop: '10px' }}>
           <div style={{ position: 'absolute', right: '0px', cursor: 'pointer' }}>
@@ -298,13 +298,13 @@ function DesireCourseform(props) {
           </div>
         </SimpleCard>
 
-
         <div style={{ width: "100%", display: "flex", justifyContent: "center", margin: "20px 0px" }}>
           <Button color='primary' variant='contained' type='submit'>
             Next  & Continue
           </Button>
         </div>
       </ValidatorForm>
+        </div>
 
       <Dialog open={open} aria-labelledby='form-dialog-title'>
         <DialogTitle id='form-dialog-title'>Confirm</DialogTitle>

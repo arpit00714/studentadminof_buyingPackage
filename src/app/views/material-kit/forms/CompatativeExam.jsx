@@ -55,11 +55,12 @@ function CompatativeExam() {
 
   return (
     <div>
+       <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
       <Container>
         <Box className="breadcrumb">
           <StepSlider />
         </Box>
-        <div
+        {/* <div
           style={{
             width: "100%",
             display: "flex",
@@ -96,7 +97,7 @@ function CompatativeExam() {
               <Span sx={{ pl: 1, textTransform: "capitalize" }}>Preview</Span>
             </Button>
           )}
-        </div>
+        </div> */}
         {editpage && (
           <Stack spacing={3}>
 
@@ -116,6 +117,7 @@ function CompatativeExam() {
           </SimpleCard>
         </Stack> */}
       </Container>
+      </div>
     </div>
   );
 }
