@@ -355,7 +355,7 @@ const SimpleForm = (props) => {
     }
   };
   const HandleAddmoreParents = () => {
-    if (parentsdetails) {
+    // if (parentsdetails) {
       SetParentsList([
         ...parentsList,
         {
@@ -381,7 +381,7 @@ const SimpleForm = (props) => {
       state.universityname = "";
       state.Designation = "";
       state.professionofparents = "";
-    }
+    // }
     setShowparentaddmore(true);
   };
   const [showsibdonebtn, setsibdonebtn] = useState(true);
