@@ -5,7 +5,9 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import DeleteIcon from "@mui/icons-material/Delete";
 import apiUrl from "URLS/ApiUrl";
+import { H3, H4, Span } from "app/components/Typography";
 import { filesupload } from "Apis/filesupload";
 import { persnoaldetailsupdate } from "Apis/Persnoldetailsform";
 const TextFieldEdit = styled(TextField)(() => ({
@@ -39,6 +41,7 @@ function Acadmeicfromedit(props) {
     console.log("userpublicationdata", userpublicationdata)
     const [open, setOpen] = useState(false)
     const [editpage, setEditPage] = useState(false);
+    const [cgpaPercentageList, setCgpaPercentageList] = useState([""]);
     const [SchoolData, setSchoolData] = useState(userschooldata)
     const [UndergraduationData, setUndergraduationData] = useState(Undergraduation)
     const [postgradutionDatra, SetPostGradutionData] = useState(Postgraduation)
@@ -64,7 +67,31 @@ function Acadmeicfromedit(props) {
         return;
     }
 
+    // add% 
+    // const handleInputChange = (index, value) => {
+    //     const updatedList = [...UndergraduationData.cgpaPercentage];
+    //     updatedList[index] = { ...updatedList[index], cgpa: value };
+    //     setUndergraduationData({ ...UndergraduationData, cgpaPercentage: updatedList });
+    // };
+  
 
+    const handleaddgradution = () => {
+        setCgpaPercentageList([...cgpaPercentageList,""]);
+        // const defaults = {
+        //     cgpaPercentage
+        //        :
+        //        "",}
+        // setCgpaPercentageList([...cgpaPercentageList,defaults])  
+      };
+//  delete
+
+const handleunderPercentage = (index) => {
+    const updateunderper = [...cgpaPercentageList];
+    updateunderper.splice(index, 1);
+    setCgpaPercentageList(updateunderper);
+  };
+  
+    // 
     const handleInputChange = (section, field, value, index = null) => {
         switch (section) {
             case "sccschool":
@@ -589,18 +616,38 @@ function Acadmeicfromedit(props) {
                                 value={UndergraduationData?.cgpaPercentageoutof}
                                 onChange={(e) => handleInputChange("undergradution", "cgpaPercentageoutof", e.target.value)}
                             />
+                            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                            {cgpaPercentageList.map((cgpa, index) => (
+                            <Grid item xs={12} key={index} style={{ display: "flex", alignItems: "center" }}>
                             <TextFieldEdit
                                 disabled={!editpage}
                                 type="text"
-                                label="Cgpa"
+                                label={`${index + 1}year CGPA/Percentage`}
                                 value={UndergraduationData?.cgpaPercentage}
                                 onChange={(e) => handleInputChange("undergradution", "cgpaPercentage", e.target.value)}
-                            />
+                                />
+                                {index !== cgpaPercentageList.length - 1 && (
+                                <DeleteIcon
+                                    style={{ marginLeft: "10px" }}
+                                    onClick={() => {
+                                    handleunderPercentage(index);
+                                    }}
+                                />
+                                )}
+                            </Grid>
+                            ))}
+                        </Grid>
+                        <Button onClick={handleaddgradution} color="primary" variant="contained">
+              <Icon>add</Icon>
+              <Span sx={{ pl: 1, textTransform: "capitalize" }}>Add More</Span>
+            </Button>
+                            
                             {/* {UndergraduationData.yearlycgpa?.map((item, key) => {
                                 return <TextFieldEdit disabled={!editpage} value={item} label={`${key + 1} year %`}
                                     onChange={(e) => handleInputChange("undergradution", "yearlycgpa", e.target.value, key)}
                                 />;
                             })} */}
+                            <br /> <br />
                             <TextFieldEdit
                                 disabled={!editpage}
                                 type="date"

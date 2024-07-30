@@ -385,6 +385,7 @@ const SimpleForm = (props) => {
     setShowparentaddmore(true);
   };
   const [showsibdonebtn, setsibdonebtn] = useState(true);
+  
   const handleAddSiblings = () => {
     if (nameofsibiling !== "") {
       SetSiblingsList([
@@ -595,7 +596,7 @@ const SimpleForm = (props) => {
                 errorMessages={["This field is required", "Must be a valid pincode"]}
                 />
                 
-                
+
                 <div><div>Student image</div>
                   <div> <input
                     type="file"
@@ -1279,7 +1280,6 @@ const SimpleForm = (props) => {
                   <Span sx={{ pl: 1, textTransform: "capitalize" }}>Add More</Span>
                 </Button>
               </div>
-
 
               {SiblingsList.map((item, key) => {
                 return (

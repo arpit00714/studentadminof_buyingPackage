@@ -72,6 +72,7 @@ function Persnoldetailspre(props) {
   const [studentupdateData, setStudentUpdateData] = useState([]);
   const [parentsDetails, setParentsDetails] = useState(parentsdetails);
   const [siblingsList, setSiblingsList] = useState(SiblingsList);
+  
   const [countryvisitdata, setCountryvisitData] = useState(
     initialData.visa.visitedsumary
   );
@@ -83,6 +84,7 @@ function Persnoldetailspre(props) {
   const [studentbirthcertificate, StudentbirthCertificate] = useState("");
   const [userVisa, SetUserVisa] = useState(visa);
   const [showparentmore, setShowparentaddmore] = useState(false);
+  const [showsibdonebtn, setsibdonebtn] = useState(false);
   const {
     address,
     firstName,
@@ -128,6 +130,12 @@ function Persnoldetailspre(props) {
     const updateparentslist = [...parentsDetails];
     updateparentslist.splice(index, 1);
     setParentsDetails(updateparentslist);
+  };
+
+  const handlesiblingList = (index) => {
+    const updateSiblingsList = [...siblingsList];
+    updateSiblingsList.splice(index, 1);
+    setSiblingsList(updateSiblingsList);
   };
 
   const handleChange = (event) => {
@@ -298,6 +306,33 @@ function Persnoldetailspre(props) {
     // setShowparentaddmore(true);
   };
   //
+
+
+  const handleAddmoreSiblings = () => {
+    {console.log(siblingsList,"sL")}
+    {console.log(SiblingsList,"SL")}
+    {console.log(havesibling,"hs")}
+    if (nameofsibiling) {
+      setSiblingsList([
+        ...SiblingsList,
+        {
+          nameofsibiling,
+          relationwithsibling,
+          educationlevelofsibling,
+          universityofsibling,
+          countryofsibling,
+          dateofborthofsibling: state.dobofsibling
+        }
+      ]);
+      state.nameofsibiling = "";
+      state.relationwithsibling = "";
+      state.educationlevelofsibling = "";
+      state.universityofsibling = "";
+      state.countryofsibling = "";
+    }
+    setsibdonebtn(true);
+  };
+
   const handlestudentbasicimg = async (event) => {
     const file = event.target.files[0]; // Get the first file selected
     const fd = new FormData();
@@ -1328,6 +1363,18 @@ function Persnoldetailspre(props) {
       >
         {/* {console.log("siblingsList", siblingsList)} */}
         {havesibling && <H3>Sibling Details</H3>}
+            
+        <div style={{ display: "flex", alignItems: "center", height: "auto", }}>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  style={{ marginLeft: "130px" ,marginTop:"-30px"}}
+                  onClick={handleAddmoreSiblings}
+                >
+                  <Icon>add</Icon>
+                  <Span sx={{ pl: 1, textTransform: "capitalize" }}>Add More</Span>
+                </Button>
+              </div>
 
         {havesibling &&
           siblingsList.map((item, key) => (
@@ -1411,9 +1458,107 @@ function Persnoldetailspre(props) {
                     )
                   }
                 />
+                {
+                (siblingsList.length > 0 ) &&
+                <div style={{ cursor: "pointer" ,position:"absolute" ,zIndex:"200",marginLeft:"350px"}}>
+                        <DeleteIcon
+                          onClick={() => {
+                            handlesiblingList(key);
+                          }}
+                        />
+                      </div>
+                }
+                {console.log(siblingsList,"sL")}
+                {console.log(SiblingsList,"SL")}
+                {console.log(havesibling,"hs")}
               </Grid>
             </Grid>
           ))}
+
+       {showsibdonebtn && (
+                <Grid container spacing={6}>
+                  <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                    <TextFieldValidator
+                      type="text"
+                      name="nameofsibiling"
+                      label="Name of Sibling"
+                      value={nameofsibiling || ""}
+                      onChange={handleChange}
+                      validators={["required"]}
+                      errorMessages={["this field is required", "address is not valid"]}
+                      disabled={!editpage}
+                    />
+                    <TextFieldValidator
+                      type="text"
+                      name="educationlevelofsibling"
+                      label="level of Education of Sibling"
+                      value={educationlevelofsibling || ""}
+                      onChange={handleChange}
+                      validators={["required"]}
+                      errorMessages={["this field is required", "address is not valid"]}
+                      disabled={!editpage}
+                    />
+                    <TextFieldValidator
+                      type="text"
+                      name="universityofsibling"
+                      label="Organization/university name"
+                      value={universityofsibling || ""}
+                      onChange={handleChange}
+                      validators={["required"]}
+                      errorMessages={["this field is required", "address is not valid"]}
+                      disabled={!editpage}
+                    />
+                  </Grid>
+
+                  <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                    <TextFieldValidator
+                      type="text"
+                      name="relationwithsibling"
+                      label="Relation"
+                      value={relationwithsibling || ""}
+                      onChange={handleChange}
+                      validators={["required"]}
+                      errorMessages={["this field is required", "address is not valid"]}
+                      disabled={!editpage}
+                    />
+                   
+                    <TextFieldValidator
+                      type="text"
+                      name="countryofsibling"
+                      label="Which country is he /she now "
+                      value={countryofsibling || ""}
+                      onChange={handleChange}
+                      validators={["required"]}
+                      errorMessages={["this field is required"]}
+                      disabled={!editpage}
+                      />
+                      Date of Birth
+                      <div style={datePickerStyles}>
+                        <LocalizationProvider Provider
+                          dateAdapter={AdapterMoment} adapterLocale="en"
+                          validators={["required"]}
+                          errorMessages={["this field is required"]}
+                          disabled={!editpage}
+                        >
+                          <DatePicker
+                            onChange={(e) => {
+                              console.log("rwe", e.format("YYYY-MM-DD"));
+                              setState((pre) => ({
+                                ...pre,
+                                dobofsibling: e.format("YYYY-MM-DD")
+                              
+                              }));
+                            }}
+
+                          // maxDate={yesterday}
+                          />
+                        </LocalizationProvider>
+                      </div>
+                    </Grid>
+                    
+                </Grid>
+              )}
+
 
         <Dialog
           open={open}
