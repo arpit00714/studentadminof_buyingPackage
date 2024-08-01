@@ -1628,17 +1628,6 @@ function AcademicForm() {
 
             <div>
 
-              {/* {addspecializedcourses !== "" && (
-                <Button
-                  style={{ marginLeft: "20px" }}
-                  onClick={handleDonespecializedcourses}
-                  color="primary"
-                  variant="contained"
-                >
-                  <Icon>done</Icon>
-                  <Span sx={{ pl: 1, textTransform: "capitalize" }}>Save</Span>
-                </Button>
-              )} */}
             </div>
           </Grid>
         </Grid>
@@ -1852,9 +1841,7 @@ function AcademicForm() {
                 <Icon>add</Icon>
                 <Span sx={{ pl: 1, textTransform: "capitalize" }}>Add More</Span>
               </Button>
-
             }
-
           </div>
 
 
@@ -2545,7 +2532,6 @@ function AcademicForm() {
                 <Span sx={{ pl: 1, textTransform: "capitalize" }}>Add More</Span>
               </Button>
             }
-
           </div>
 
 
