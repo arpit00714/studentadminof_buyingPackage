@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Typography,MenuItem,Icon,styled } from "@mui/material";
+import { H3, Span } from 'app/components/Typography';
 import { UniversityList } from "Apis/University";
 import { useEffect } from "react";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
+// import MenuItem from "@mui/material/MenuItem";
 import { persnoaldetailsupdate } from "Apis/Persnoldetailsform";
+import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useSpring, animated } from '@react-spring/web';
 import PropTypes from 'prop-types';
 import Backdrop from '@mui/material/Backdrop';
@@ -15,6 +18,26 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { useNavigate } from 'react-router-dom';
+import { SimpleCard } from 'app/components';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import moment from 'moment';
+import zIndex from "@mui/material/styles/zIndex";
+import { List } from "echarts";
+
+const TextFieldValidator = styled(TextValidator)(() => ({
+  width: '100%',
+  marginBottom: '16px'
+}));
+const initialDesireCourseState = {
+  universityName: '',
+  course: '',
+  intake: '',
+  Weblink: '',
+  courseDate: ''
+};
+
 const Fade = React.forwardRef(function Fade(props, ref) {
   const {
     children,
@@ -70,6 +93,13 @@ const style = {
 
 
 function Desirecousrepre(props) {
+  const [desireCourselist, setDesireCourseList] = useState([]);
+  const [desireCourse, setDesireCourse] = useState(initialDesireCourseState);
+  const [showfrom, setShowfrom] = useState(true);
+  const [showndesirecoureses, setshowDesireCourse] = useState([]);
+  const [selcetAddnew, setSelectAddNew] = useState(false);
+  const [intake, Setintake] = useState('');
+  const [coursedate, setDesireCourseDate] = useState(null);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -79,11 +109,14 @@ function Desirecousrepre(props) {
   const formstatus = props.formstatus
   const [filedopen, setfiledOpen] = useState(true);
   const [age, setAge] = useState("");
-  const showndesirecourese = props.userData;
+  const showndesirecourese = props?.userData ? props?.userData : []
   const [unList, setUNList] = useState([]);
   const [editpage, setEditPage] = useState(false);
   const [editableData, setEditableData] = useState(showndesirecourese);
+  const navigation = useNavigate();
   console.log("showndesirecourese", showndesirecourese)
+
+  
   const handleInputChange = (index, field, value) => {
     const newData = [...editableData];
     newData[index][field] = value;
@@ -91,6 +124,7 @@ function Desirecousrepre(props) {
   };
 
   const userID = localStorage.getItem("userID");
+
   const handleSElectChange = (event) => {
     setAge(event.target.value);
     console.log("event.target.value", event.target.value);
@@ -116,12 +150,64 @@ function Desirecousrepre(props) {
     university();
   }, []);
 
+   console.log(editableData,"editabledata")
+   console.log(desireCourse,"desireCourse")
 
-  const handleEditSubmit = async () => {
+   const handleSubmit = async () => {
+     const desiredata = [...showndesirecourese, desireCourse]
+
     try {
       const resp = await persnoaldetailsupdate(
         {
-          desirecourseform: JSON.stringify(editableData)
+          desirecourseform: JSON.stringify(desiredata)
+        },
+        userID,
+      );
+      if (resp.status === 200) {
+        setOpen(false);
+        navigation('/student/material/PersnolQuestion');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleChange = (event) => {
+    
+    setDesireCourse({ ...editableData, [event.target.name]: event.target.value });
+  };
+
+  const handleDeleteCourse = (index) => {
+    const updatedList = [...editableData];
+    updatedList.splice(index, 1);
+    setEditableData(updatedList);
+    // setEditableData(updatedList);  // Sync `desireCourselist` with updated `showndesirecourese`
+    console.log("deletedelaekldkdekldeletedlete")
+  };
+
+  const handleAdddesireCourse = () => {
+    // if (desireCourse.universityName !== "") {
+    //   setShowfrom(!showfrom);
+     const updatedata = [...editableData, desireCourse];
+     setEditableData(updatedata)
+      // setDesireCourse([...desireCourse,desireCourse])
+      // setEditableData([...editableData, desireCourse])
+      // setSelectAddNew(false);
+    // }
+    setDesireCourse(initialDesireCourseState);
+    return updatedata
+    // setDesireCourseList({})
+  };
+
+  const handleEditSubmit = async () => {
+    console.log(desireCourse.universityName,"desireCourse.universityName")
+    // if(desireCourse.universityName)
+    //  handleAdddesireCourse();
+    try {
+      const resp = await persnoaldetailsupdate(
+        {
+          desirecourseform: JSON.stringify(desireCourse.universityName?handleAdddesireCourse():editableData),
+          // desirecourseform: JSON.stringify(update)
         },
         userID
       );
@@ -143,12 +229,15 @@ function Desirecousrepre(props) {
         }}>
           Edit
         </Button>
-        
       </div>}
      <br />
      
       <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
-      {editableData.map((item, key) => (
+      {editableData?.map((item, key) => (
+        <div key={key} style={{ position: 'relative', height: '350px', marginTop: '10px' }}>
+        <div style={{  right: '0px', cursor: 'pointer' }}>
+          <DeleteIcon onClick={() => handleDeleteCourse(key)} />
+        </div>
         <div
           key={key}
           style={{
@@ -204,7 +293,6 @@ function Desirecousrepre(props) {
                 onChange={(e) => handleInputChange(key, "universityName", e.target.value)}
               />
 
-             
               <TextField
                 style={{ width: "100%", marginBottom: "16px" }}
                 type="text"
@@ -245,18 +333,141 @@ function Desirecousrepre(props) {
               />
             </Grid>
           </Grid>
-
         </div>
-      ))}
       </div>
+      ))}
+      <hr />
+       <ValidatorForm onSubmit={handleSubmit} >
+        <SimpleCard title="Universities And Courses You Desire">
+
+          <div>
+            <Grid></Grid>
+            <div style={{ display: 'flex', alignItems: 'center', margin: '20px 0px' }}>
+              <H3>Universities</H3>
+              <Button onClick={handleAdddesireCourse} disabled={!editpage} color='primary' variant='contained' style={{ marginLeft: '10px' }}>
+                <Icon>add</Icon>
+                <Span sx={{ pl: 1, textTransform: 'capitalize' }}>Add More</Span>
+              </Button>
+            </div>
+
+            <Grid container spacing={6}>
+              <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                {selcetAddnew === false && (
+                  <Select
+                    style={{ width: '100%', marginBottom: '16px' }}
+                    labelId='demo-simple-select-label'
+                    id='demo-simple-select'
+                    disabled={!editpage}
+                    value={age}
+                    onChange={(e) => {
+                      setAge(e.target.value);
+                      setDesireCourse({ ...desireCourse, universityName: e.target.value });
+                    }}
+                  >
+                    {unList.map((item) => item.status && <MenuItem key={item.UniversityName} value={item.UniversityName}>{item.UniversityName}</MenuItem>)}
+                    <div style={{ width: '100%', justifyContent: 'center', display: 'flex', margin: '10px 0px' }}>
+                      <button
+                        onClick={() => setSelectAddNew(true)}
+                        style={{ width: '80%', border: 'none', background: 'white', cursor: 'pointer' }}
+                      >
+                        Add New
+                      </button>
+                    </div>
+                  </Select>
+                )}
+              
+                {selcetAddnew && (
+                  <TextFieldValidator
+                  disabled={!editpage}
+                    type='text'
+                    name='universityName'
+                    label='Name'
+                    onChange={handleChange}
+                    value={desireCourse.universityName}
+                    validators={['required']}
+                    errorMessages={['this field is required']}
+                  />
+                )}
+              
+                <TextFieldValidator
+                disabled={!editpage}
+                  type='text'
+                  name='course'
+                  label='course'
+                  onChange={handleChange}
+                  value={desireCourse.course}
+                  validators={['required']}
+                  errorMessages={['this field is required']}
+                />
+              </Grid>
+              <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                <div style={{ width: '100%' }}>
+                  <H3>Intake</H3>
+                  <Select
+                  disabled={!editpage}
+                    placeholder='intake'
+                    style={{ width: '100%', marginBottom: '16px' }}
+                    labelId='demo-simple-select-label'
+                    id='demo-simple-select'
+                    value={intake}
+                    onChange={(e) => {
+                      Setintake(e.target.value);
+                      setDesireCourse({ ...desireCourse, intake: e.target.value });
+                    }}
+                  >
+                    <MenuItem value={'Spring'}>Spring</MenuItem>
+                    <MenuItem value={'Spring'}>Fall</MenuItem>
+                    <MenuItem value={'Winter'}>Winter</MenuItem>
+                    <MenuItem value={'Summer'}>Summer</MenuItem>
+                  </Select>
+                </div>
+
+                <TextFieldValidator
+                disabled={!editpage}
+                  type='text'
+                  name='Weblink'
+                  label='Weblink'
+                  onChange={handleChange}
+                  value={desireCourse.Weblink}
+                  validators={['required']}
+                  errorMessages={['this field is required']}
+                />
+
+                <LocalizationProvider adapterLocale="en" dateAdapter={AdapterMoment}>
+                  <DatePicker
+                   disabled={!editpage}
+                    views={["year"]}
+                    label="Year"
+                    value={coursedate}
+                    onChange={(value) => {
+                      setDesireCourseDate(value);
+                      setDesireCourse({ ...desireCourse, courseDate: moment(value).format('YYYY') });
+                    }}
+                    renderInput={(props) => <TextField {...props} label='Course Year' style={{ width: '100%', marginBottom: '16px' }} />}
+                  />
+                </LocalizationProvider>
+              </Grid>
+            </Grid>
+
+            {/* <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+              <Button onClick={handleSaveCourse} color='primary' variant='contained' style={{ margin: '30px 0px' }}>
+                Save
+              </Button>
+            </div> */}
+
+          </div>
+        </SimpleCard>
       {/* <Button style={{ marginTop: "20px" }} color="primary" variant="contained" onClick={() => {
         handleEditSubmit()
       }}>Submit</Button> */}
+      <br />
       {editpage && (
           <Button variant="contained" color="secondary" onClick={handleEditSubmit}>
             Save
           </Button>
         )}
+        </ValidatorForm>
+        </div>
 
 
       {formstatus && <Dialog

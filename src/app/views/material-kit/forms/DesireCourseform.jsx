@@ -136,6 +136,14 @@ function DesireCourseform(props) {
           <div style={{ position: 'absolute', right: '0px', cursor: 'pointer' }}>
             <DeleteIcon onClick={() => handleDeleteCourse(key)} />
           </div>
+          <div
+          key={key}
+          style={{
+            position: "relative",
+            height: "250px",
+            marginTop: "10px"
+          }}
+        >
           <Grid container spacing={6}>
             <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
               <TextField
@@ -177,6 +185,7 @@ function DesireCourseform(props) {
               />
             </Grid>
           </Grid>
+        </div>
         </div>
       ))}
       {commentbox && <Popup commentbox={commentbox} setCommentBox={setCommentBox} />}

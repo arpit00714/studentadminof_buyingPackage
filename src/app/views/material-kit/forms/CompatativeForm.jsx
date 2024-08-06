@@ -2,8 +2,8 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import "moment/locale/de";
 import { Autocomplete, Button, Grid, styled } from "@mui/material";
-import { H3, Span } from "app/components/Typography";
 import { useState } from "react";
+import { H3, Span } from "app/components/Typography";
 import TextField from "@mui/material/TextField";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { Fragment } from "react";
@@ -122,7 +122,6 @@ function CompatativeForm() {
         console.log(err);
       }
     }
-
   };
   const handleClose = async () => {
     // setOpen(false);

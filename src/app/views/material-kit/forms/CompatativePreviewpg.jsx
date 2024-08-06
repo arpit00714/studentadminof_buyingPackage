@@ -1,11 +1,24 @@
 import React, { useState } from "react";
-import { TextField, Button, Grid } from "@mui/material";
-import { H3 } from "app/components/Typography";
+import { Autocomplete, TextField, Button, Grid, styled } from "@mui/material";
+import { H3, Span } from "app/components/Typography";
+// import TextField from "@mui/material/TextField";
+import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { persnoaldetailsupdate } from "Apis/Persnoldetailsform";
 import Dialog from "@mui/material/Dialog";
+import Icon from "@mui/material/Icon";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { useLocation, useNavigate } from "react-router-dom";
+
+
+const TextFieldValidator = styled(TextValidator)(() => ({
+  width: "100%",
+  marginBottom: "16px"
+}));
+
+const AutoComplete = styled(Autocomplete)(() => ({ width: 300, marginBottom: "16px" }));
+
 function Compatativepre(props) {
   const formstatus = props.formstatus
   const userID = localStorage.getItem("userID");
@@ -13,6 +26,239 @@ function Compatativepre(props) {
   const [filedopen, setfiledOpen] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [compatativeExamList, setCompatativeExamList] = useState(props.userData);
+  const [typeofexam, setTypeofExam] = useState("");
+
+// ----------------------------------------------------------------
+  // const [compatativeExamLists, SetCompatativeExamList] = useState([]);
+  const [userexamType, setUserExamType] = useState("");
+  const navigation = useNavigate();
+  const [commentbox, setCommentBox] = useState(false)
+  const [GreExamForm, SetGreExamForm] = useState("");
+  const [GmateExamForm, SetGmateExamForm] = useState([]);
+  const [IELTSExamForm, SetIELTSExamForm] = useState("");
+  const [TOEFLExamForm, SetTOEFLExamForm] = useState("");
+  // const [typeofexam, setTypeofExam] = useState("");
+  // const [compatativeExamList, SetCompatativeExamList] = useState([]);
+  const [examdate, setExamDate] = useState("");
+  // const userID = localStorage.getItem("userID");
+  console.log("userID", userID);
+  // const [open, setOpen] = useState(false);
+  const { Username, Password, AWA, Quantitative, Verbal, Total } = GreExamForm;
+  const {
+    GmateUsername,
+    GmatePassword,
+    GmateAWA,
+    GmateIR,
+    GmateQuantitative,
+    GmateVerbal,
+    GmateTotal
+  } = GmateExamForm;
+
+  const {
+    IELTSUsername,
+    IELTSPassword,
+    IELTSReading,
+    IELTListening,
+    IELTSSpeaking,
+    IELTSWriting,
+    IELTSTotal
+  } = IELTSExamForm;
+
+  const {
+    TOEFLEUsername,
+    TOEFLEPassword,
+    TOEFLEReading,
+    TOEFLEistening,
+    TOEFLESpeaking,
+    TOEFLEWriting,
+    TOEFLETotal
+  } = TOEFLExamForm;
+
+  const handleSubmitt = async () => {
+    if (typeofexam !== "") {
+      const copatativedata = [
+        ...compatativeExamList,
+        {
+          GreExamForm: {
+            examdate,
+            Username,
+            Password,
+            AWA,
+            Quantitative,
+            Verbal,
+            Total,
+            typeofexam
+          }
+        }
+      ]
+      try {
+        console.log("userIDSS", userID);
+        const resp = await persnoaldetailsupdate(
+          {
+            CompatativeExam: JSON.stringify(copatativedata)
+          },
+          userID
+        );
+        console.log("resp", resp);
+        if (resp.status === 200) {
+          setOpen(false);
+          if (userexamType === "Pg work Experince") {
+            navigation("/student/material/CareerHighlight");
+          } else {
+            navigation("/student/material/Recomenderdetails");
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+  };
+  const handleClosee = async () => {
+    // setOpen(false);
+    try {
+      console.log("userIDSS", userID);
+      const eramarr = [GreExamForm, GmateExamForm, IELTSExamForm, TOEFLExamForm];
+      const resp = await persnoaldetailsupdate(
+        {
+          CompatativeExam: JSON.stringify(compatativeExamList)
+        },
+        userID
+      );
+      console.log("resp", resp);
+      if (resp.status === 200) {
+        setOpen(false);
+        if (userexamType === "Pg work Experince") {
+          navigation("/student/material/CareerHighlight");
+        } else {
+          navigation("/student/material/Recomenderdetails");
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleChange = (event) => {
+    setCommentBox(false)
+    if (typeofexam === "GRE") {
+      SetGreExamForm({ ...GreExamForm, [event.target.name]: event.target.value });
+    }
+    if (typeofexam === "GMAT") {
+      SetGmateExamForm({ ...GmateExamForm, [event.target.name]: event.target.value });
+    }
+    if (typeofexam === "IELTS") {
+      SetIELTSExamForm({ ...IELTSExamForm, [event.target.name]: event.target.value });
+    }
+    if (typeofexam === "TOEFL") {
+      SetTOEFLExamForm({ ...TOEFLExamForm, [event.target.name]: event.target.value });
+    }
+  };
+
+  // delete 
+  const HandleDeleteExam = (examname, index) => {
+    const updatexamlist = [...compatativeExamList];
+    updatexamlist.splice(index, 1);
+    setCompatativeExamList(updatexamlist);
+    console.log("examname", examname, index);
+  };
+  // 
+  const [donebtn, setdonebtn] = useState(false);
+
+  const HandleAddExams = () => {
+    console.log('HandleAddExams typeogexam',typeofexam);
+    console.log(compatativeExamList)
+    setdonebtn(false);
+    // if (Username !== undefined) {
+      if (typeofexam === "GRE") {
+        setCompatativeExamList((p)=>[
+          ...p,
+          {
+            GreExamForm: {
+              examdate,
+              Username,
+              Password,
+              AWA,
+              Quantitative,
+              Verbal,
+              Total,
+              typeofexam
+            }
+          }
+        ]);
+        SetGreExamForm({});
+      }
+    // }
+
+    // if (GmateUsername !== undefined) {
+      if (typeofexam === "GMAT") {
+        setCompatativeExamList([
+          ...compatativeExamList,
+          {
+            GmateExamForm: {
+              examdate,
+              GmateUsername,
+              GmatePassword,
+              GmateAWA,
+              GmateIR,
+              GmateQuantitative,
+              GmateVerbal,
+              GmateTotal,
+              typeofexam
+            }
+          }
+        ]);
+        SetGmateExamForm({});
+      }
+    // }
+
+    // if (IELTSUsername !== undefined) {
+      if (typeofexam === "IELTS") {
+        setCompatativeExamList([
+          ...compatativeExamList,
+          {
+            IELTSExamForm: {
+              examdate,
+              IELTSUsername,
+              IELTSPassword,
+              IELTSReading,
+              IELTListening,
+              IELTSSpeaking,
+              IELTSWriting,
+              IELTSTotal,
+              typeofexam
+            }
+          }
+        ]);
+        SetIELTSExamForm({});
+      }
+    // }
+
+    // if (TOEFLEUsername !== undefined) {
+      if (typeofexam === "TOEFL") {
+        setCompatativeExamList([
+          ...compatativeExamList,
+          {
+            TOEFLExamForm: {
+              examdate,
+              TOEFLEUsername,
+              TOEFLEPassword,
+              TOEFLEReading,
+              TOEFLEistening,
+              TOEFLESpeaking,
+              TOEFLEWriting,
+              TOEFLETotal,
+              typeofexam
+            }
+          }
+        ]);
+        SetTOEFLExamForm({});
+      }
+    }
+  // };
+
+  // -----------------------------------------
+
+
   console.log("props.userData", props.userData)
   const handleEditClick = () => {
     setEditMode(true);
@@ -23,6 +269,22 @@ function Compatativepre(props) {
     updatedList[index][examType][field] = value;
     setCompatativeExamList(updatedList);
   };
+
+
+const suggestio = [
+  {
+    label: "GRE"
+  },
+  {
+    label: "GMAT"
+  },
+  {
+    label: "IELTS"
+  },
+  {
+    label: "TOEFL"
+  }
+];
 
   const handleSubmit = async () => {
     setOpen(true)
@@ -45,7 +307,7 @@ function Compatativepre(props) {
   }
   return (
     <div> 
-
+  
       {!formstatus && <div>
         <Button variant="contained" color="primary" onClick={handleEditClick}>
           Edit
@@ -53,11 +315,41 @@ function Compatativepre(props) {
        
       </div>}
       <br />
-
-            <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
-      {compatativeExamList.map((item, index) => (
+      
+          <div style={{ border:"2px solid #00000080",padding:"20px",marginBottom:"20px"}}>
+          <ValidatorForm onSubmit={handleSubmit} onError={() => {
+        setCommentBox(true)
+      }} >
+       
+      
+      {compatativeExamList.map((item, index,key) => (
         <div key={index}>
+        
           {item?.GreExamForm && (
+             <div>
+             <div
+               style={{
+                 width: "100%",
+                 margin: "10px 0px",
+                 display: "flex",
+                 justifyContent: "end",
+                 padding: "10px",
+                 cursor: "pointer",
+                 alignItems: "center"
+               }}
+             >
+             { compatativeExamList.length > 1 && <Button
+                 style={{ color: "black" }}
+                 disabled={!editMode}
+                 onClick={() => {
+                   HandleDeleteExam(typeofexam, key);
+                 }}
+               >
+                 <span className="material-symbols-outlined">
+                   <Icon  disabled={!editMode}>delete</Icon>
+                 </span>
+               </Button> }
+             </div>
             <div>
               <H3>{item?.GreExamForm?.typeofexam}</H3>
               <Grid container spacing={6}>
@@ -144,8 +436,32 @@ function Compatativepre(props) {
                 </Grid>
               </Grid>
             </div>
+            </div>
           )}
           {item?.GmateExamForm && (
+             <div>
+             <div
+               style={{
+                 width: "100%",
+                 margin: "10px 0px",
+                 display: "flex",
+                 justifyContent: "end",
+                 padding: "10px",
+                 cursor: "pointer",
+                 alignItems: "center"
+               }}
+             >
+              { compatativeExamList.length > 1 && <Button
+                 style={{ color: "black" }}
+                 onClick={() => {
+                   HandleDeleteExam(typeofexam, key);
+                 }}
+               >
+                 <span className="material-symbols-outlined">
+                   <Icon>delete</Icon>
+                 </span>
+               </Button> }
+             </div>
             <div>
               <H3>{item.GmateExamForm.typeofexam}</H3>
               <Grid container spacing={6}>
@@ -243,8 +559,32 @@ function Compatativepre(props) {
                 </Grid>
               </Grid>
             </div>
+            </div>
           )}
           {item?.IELTSExamForm && (
+             <div>
+             <div
+               style={{
+                 width: "100%",
+                 margin: "10px 0px",
+                 display: "flex",
+                 justifyContent: "end",
+                 padding: "10px",
+                 cursor: "pointer",
+                 alignItems: "center"
+               }}
+             >
+              {compatativeExamList.length > 1 && <Button
+                 style={{ color: "black" }}
+                 onClick={() => {
+                   HandleDeleteExam(typeofexam, key);
+                 }}
+               >
+                 <span className="material-symbols-outlined">
+                   <Icon>delete</Icon>
+                 </span>
+               </Button>}
+             </div>
             <div>
               <H3>{item.IELTSExamForm.typeofexam}</H3>
               <Grid container spacing={6}>
@@ -342,8 +682,32 @@ function Compatativepre(props) {
                 </Grid>
               </Grid>
             </div>
+          </div>
           )}
           {item?.TOEFLExamForm && (
+             <div>
+             <div
+               style={{
+                 width: "100%",
+                 margin: "10px 0px",
+                 display: "flex",
+                 justifyContent: "end",
+                 padding: "10px",
+                 cursor: "pointer",
+                 alignItems: "center"
+               }}
+             >
+              {compatativeExamList.length > 1 && <Button
+                 style={{ color: "black" }}
+                 onClick={() => {
+                   HandleDeleteExam(typeofexam, key);
+                 }}
+               >
+                 <span className="material-symbols-outlined">
+                   <Icon>delete</Icon>
+                 </span>
+               </Button> }
+             </div>
             <div>
               <H3>{item.TOEFLExamForm.typeofexam}</H3>
               <Grid container spacing={6}>
@@ -438,12 +802,39 @@ function Compatativepre(props) {
                       handleInputChange(index, "TOEFLExamForm", "TOEFLETotal", e.target.value)
                     }
                   />
+         
                 </Grid>
               </Grid>
             </div>
+            </div>
           )}
+          <hr/>
+           {compatativeExamList.length === index+1 &&  <div style={{ display: "flex", alignItems: "center" }}>
+          <AutoComplete
+            options={suggestio}
+            disabled={!editMode}
+            getOptionLabel={(option) => option.label}
+            onChange={(e, val) => {
+              setTypeofExam(val?.label);
+            }}
+            renderInput={(params) => (
+              <TextFieldValidator
+                {...params}
+                label="Type Of Exam"
+                variant="outlined"
+                fullWidth
+              />
+            )}
+          />
+             <Button style={{ marginLeft: "20px", marginTop: "-40px" }} disabled={!editMode} color="primary" variant="contained" onClick={HandleAddExams}>
+            <Icon>add</Icon>
+            <Span sx={{ pl: 1, textTransform: "capitalize" }}>Add More</Span>
+          </Button>
+        </div>}
+   
         </div>
       ))}
+        </ValidatorForm>
       </div>
        {editMode && (
           <Button variant="contained" color="secondary" onClick={handleSubmit}>

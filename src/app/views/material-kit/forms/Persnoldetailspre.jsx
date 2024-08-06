@@ -309,12 +309,13 @@ function Persnoldetailspre(props) {
 
 
   const handleAddmoreSiblings = () => {
-    {console.log(siblingsList,"sL")}
-    {console.log(SiblingsList,"SL")}
-    {console.log(havesibling,"hs")}
-    if (nameofsibiling) {
+    // {console.log(siblingsList,"sL")}
+    // {console.log(SiblingsList,"SL")}
+    // {console.log(havesibling,"hs")}
+    console.log(siblingsList[siblingsList.length-1]?.nameofsibiling,'nameofsibiling')
+    if (siblingsList[siblingsList.length-1]?.nameofsibiling) {
       setSiblingsList([
-        ...SiblingsList,
+        ...siblingsList,
         {
           nameofsibiling,
           relationwithsibling,
@@ -329,8 +330,8 @@ function Persnoldetailspre(props) {
       state.educationlevelofsibling = "";
       state.universityofsibling = "";
       state.countryofsibling = "";
+      // setsibdonebtn(true);
     }
-    setsibdonebtn(true);
   };
 
   const handlestudentbasicimg = async (event) => {
@@ -1038,6 +1039,7 @@ function Persnoldetailspre(props) {
         <div style={{ display: "flex", alignItems: "center", height: "auto" }}>
           <H3>Parents or Guardian Details</H3>
           <Button
+          disabled={!editpage}
             color="primary"
             variant="contained"
             style={{ marginLeft: "20px" }}
@@ -1362,10 +1364,11 @@ function Persnoldetailspre(props) {
         }}
       >
         {/* {console.log("siblingsList", siblingsList)} */}
-        {havesibling && <H3>Sibling Details</H3>}
+        <H3>Sibling Details</H3>
             
         <div style={{ display: "flex", alignItems: "center", height: "auto", }}>
                 <Button
+                 disabled={!editpage}
                   color="primary"
                   variant="contained"
                   style={{ marginLeft: "130px" ,marginTop:"-30px"}}
@@ -1459,7 +1462,7 @@ function Persnoldetailspre(props) {
                   }
                 />
                 {
-                (siblingsList.length > 0 ) &&
+                (siblingsList.length > 1 && key!=0) &&
                 <div style={{ cursor: "pointer" ,position:"absolute" ,zIndex:"200",marginLeft:"350px"}}>
                         <DeleteIcon
                           onClick={() => {
