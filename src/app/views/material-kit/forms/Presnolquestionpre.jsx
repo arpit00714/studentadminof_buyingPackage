@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Button, Grid, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, styled } from "@mui/material";
+import {Icon, Button, Grid, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, styled } from "@mui/material";
 import { persnoaldetailsupdate } from "Apis/Persnoldetailsform";
+import { Span } from "app/components/Typography";
+import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 
 const TextFieldEdit = styled(TextField)(() => ({
   width: "100%",
@@ -8,6 +10,7 @@ const TextFieldEdit = styled(TextField)(() => ({
 }));
 
 function Presnolquestionpre(props) {
+  const [commentbox, setCommentBox] = useState(false);
   const formstatus = props.formstatus
   const [filedopen, setfiledOpen] = useState(true);
   const [formData, setFormData] = useState(props?.userData);
@@ -15,31 +18,63 @@ function Presnolquestionpre(props) {
   const [open, setOpen] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const userID = localStorage.getItem("userID");
+  const [persnolquestion, setPersnolQuestion] = useState({
+    AcademicBackgroudhelpyou: "",
+    Familyhelpyou: "",
+    coursemakingsositybatterplace: "",
+    helpdesirecoursetohelpgoal: "",
+    interestindesirearea: "",
+    ogicalculminationofyourprogress: "",
+    professionalBackgroudyou: "",
+    shortandlongtermgoal: "",
+    startedakingshapeinyourmind: "",
+    surroundinghelpyou: "",
+  });
   const countWords = (str) => {
     return str.trim().split(/\s+/).length;
   };
   const handleChange = (e, index) => {
     const { name, value } = e.target;
     const updatedFormData = [...formData];
-    updatedFormData[index] = { ...updatedFormData[index], [name]: value };
+    updatedFormData[index] = { ...updatedFormData[index], [name]: value};
     setFormData(updatedFormData);
   };
   const toggleEdit = () => {
     setEditable(!editable);
   };
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setOpen(true);
-    // const fieldValues = formData.flatMap(Object.values); // Flatten the values from each formData object
-    // const allFieldsLongEnough = fieldValues.every((field) => field?.length >= 250);
-    // setShowInfo(allFieldsLongEnough);
-    const fieldValues = formData.flatMap(Object.values);
+    const fieldValues = Object.values(persnolquestion);
     const allFieldsLongEnough = fieldValues.every((field) => countWords(field) >= 250);
     setShowInfo(allFieldsLongEnough);
-
+    
     if (allFieldsLongEnough) {
-      // Add your API call here to save data
-      console.log("Submitted data:", formData);
-      setEditable(false); // Disable editing after submission
+      setFormData([
+        ...formData,
+        { ...persnolquestion },
+      ]);
+    }
+  };
+
+  const handleSubmits = async () => {
+    const updatedData = [...formData, persnolquestion];
+    setEditable(updatedData);
+    console.log("persnoaldeata", updatedData);
+    try {
+      if (persnolquestion.interestindesirearea !== "") {
+        const resp = await persnoaldetailsupdate(
+          {
+            persnoaldetailsfrom: JSON.stringify(updatedData),
+          },
+          userID
+        );
+        console.log("resp", resp);
+        if (resp.status === 200) {
+          setPersnolQuestion({});
+        }
+      }
+    } catch (err) {
+      console.log("x", err);
     }
   };
 
@@ -75,13 +110,18 @@ function Presnolquestionpre(props) {
 
   return (
     <div>
-      {!formstatus && <div>
-        <Button variant="contained" color="primary" onClick={toggleEdit}>
+      {!formstatus && !editable && (<div>            
+              <Button variant="contained" color="primary" onClick={toggleEdit}  >
           {editable ? "Cancel" : "Edit"}
         </Button>
        
-      </div>}
-
+      </div>)}
+      <ValidatorForm
+        onSubmit={handleSubmit}
+        onError={() => {
+          setCommentBox(true);
+        }}
+      >
       {formData?.map((item, index) => (
 
         <Grid container spacing={2}>
@@ -179,12 +219,27 @@ function Presnolquestionpre(props) {
           </Grid>
         </Grid>
       ))}
+
        {editable && (
-          <Button variant="contained" color="secondary" onClick={handleSubmit}>
+        <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "20px",
+        }}
+      >
+          <Button variant="contained" color="secondary" onClick={handleSubmits}>
             Save
           </Button>
+          <Button style={{ marginLeft: "10px" }} color="primary" variant="contained" type="submit">
+              <Icon>save</Icon>
+              <Span sx={{ pl: 1, textTransform: "capitalize" }}>Submit</Span>
+            </Button>
+          </div>
         )}
-
+        </ValidatorForm>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -200,7 +255,7 @@ function Presnolquestionpre(props) {
                 the form.
               </h3>
             </DialogContentText>
-          ) : (
+           ) : ( 
             <DialogContentText id="alert-dialog-description">
               {formData.map((item, index) =>
                 Object.entries(item).map(([key, value]) => (
@@ -209,9 +264,10 @@ function Presnolquestionpre(props) {
                     <p style={{ color: value?.length < 250 ? "red" : "green" }}>{value?.length}</p>
                   </div>
                 ))
-              )}
+              )
+              }
             </DialogContentText>
-          )}
+           )} 
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel}>Cancel</Button>
