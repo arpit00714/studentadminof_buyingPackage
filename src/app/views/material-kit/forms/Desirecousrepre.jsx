@@ -101,6 +101,7 @@ function Desirecousrepre(props) {
   const [intake, Setintake] = useState('');
   const [coursedate, setDesireCourseDate] = useState(null);
   const [open, setOpen] = React.useState(false);
+  const [editable, setEditable] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false)
@@ -223,8 +224,8 @@ function Desirecousrepre(props) {
   return (
     <>
     <div>
-      {!formstatus && <div>
-        <Button variant="contained" color="primary" onClick={() => {
+      {!formstatus && !editable && <div>
+        <Button variant="contained" color="primary" onClick={(toggleEdit) => {
           setEditPage(!editpage);
         }}>
           Edit

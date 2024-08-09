@@ -13,79 +13,104 @@ function Presnolquestionpre(props) {
   const [commentbox, setCommentBox] = useState(false);
   const formstatus = props.formstatus
   const [filedopen, setfiledOpen] = useState(true);
-  const [formData, setFormData] = useState(props?.userData);
+  const [formData, setFormData] = useState(props?.userData[0]);
   const [editable, setEditable] = useState(false);
   const [open, setOpen] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const userID = localStorage.getItem("userID");
-  const [persnolquestion, setPersnolQuestion] = useState({
-    AcademicBackgroudhelpyou: "",
-    Familyhelpyou: "",
-    coursemakingsositybatterplace: "",
-    helpdesirecoursetohelpgoal: "",
-    interestindesirearea: "",
-    ogicalculminationofyourprogress: "",
-    professionalBackgroudyou: "",
-    shortandlongtermgoal: "",
-    startedakingshapeinyourmind: "",
-    surroundinghelpyou: "",
-  });
+  // const [persnolquestion, setPersnolQuestion] = useState({
+  //   AcademicBackgroudhelpyou: "",
+  //   Familyhelpyou: "",
+  //   coursemakingsositybatterplace: "",
+  //   helpdesirecoursetohelpgoal: "",
+  //   interestindesirearea: "",
+  //   ogicalculminationofyourprogress: "",
+  //   professionalBackgroudyou: "",
+  //   shortandlongtermgoal: "",
+  //   startedakingshapeinyourmind: "",
+  //   surroundinghelpyou: "",
+  // });
   const countWords = (str) => {
-    return str.trim().split(/\s+/).length;
+    // return str.trim().split(/\s+/).length;
+    if (str == null) {
+      return 0; 
+    }
+    return str.match(/\b\w+\b/g)?.length ?? 0;
   };
-  const handleChange = (e, index) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    const updatedFormData = [...formData];
-    updatedFormData[index] = { ...updatedFormData[index], [name]: value};
-    setFormData(updatedFormData);
+    const updatedFormData = {...formData};
+    // updatedFormData[index] = { ...updatedFormData[index], [name]: value};
+    if(value && value.length  > 0){
+    updatedFormData[name] = value;
+  }
+  else{
+    updatedFormData[name] = "";
+  }
+  setFormData(updatedFormData);
   };
   const toggleEdit = () => {
     setEditable(!editable);
   };
   const handleSubmit = async () => {
     setOpen(true);
-    const fieldValues = Object.values(persnolquestion);
-    const allFieldsLongEnough = fieldValues.every((field) => countWords(field) >= 250);
+    const fieldValues = Object.values(formData);
+    // const allFieldsLongEnough = fieldValues.every((field) => countWords(field) >= 250);
+    const allFieldsLongEnough = fieldValues.every((field) => {
+      const wordCount = countWords(field);
+      console.log(`Field: ${field}, Word Count: ${wordCount}`); // Log each field's word count
+      return wordCount >= 250;
+    });
     setShowInfo(allFieldsLongEnough);
     
-    if (allFieldsLongEnough) {
-      setFormData([
-        ...formData,
-        { ...persnolquestion },
-      ]);
-    }
+    // if (allFieldsLongEnough) {
+    //   setFormData([
+    //     ...formData,
+    //     { ...formData },
+    //   ]);
+      
+    // }
   };
 
   const handleSubmits = async () => {
-    const updatedData = [...formData, persnolquestion];
-    setEditable(updatedData);
-    console.log("persnoaldeata", updatedData);
+    // const updatedData = [...formData, persnolquestion];
+    // setEditable(updatedData);
     try {
-      if (persnolquestion.interestindesirearea !== "") {
+      if (formData.interestindesirearea !== "") {
         const resp = await persnoaldetailsupdate(
           {
-            persnoaldetailsfrom: JSON.stringify(updatedData),
+            persnoaldetailsfrom: JSON.stringify([formData]),
           },
           userID
         );
-        console.log("resp", resp);
         if (resp.status === 200) {
-          setPersnolQuestion({});
+          console.log("resp", resp);
+          // setFormData({
+          //   AcademicBackgroudhelpyou: "",
+          //     Familyhelpyou: "",
+          //     coursemakingsositybatterplace: "",
+          //     helpdesirecoursetohelpgoal: "",
+          //     interestindesirearea: "",
+          //     ogicalculminationofyourprogress: "",
+          //     professionalBackgroudyou: "",
+          //     shortandlongtermgoal: "",
+          //     startedakingshapeinyourmind: "",
+          //     surroundinghelpyou: "",
+          // });
         }
       }
     } catch (err) {
       console.log("x", err);
     }
   };
-
+  console.log(formData,"formData")
   const handleClose = async () => {
-    console.log("formData", formData)
     if (showInfo) {
       try {
         const resp = await persnoaldetailsupdate(
           {
             examfromstatus: "1",
-            persnoaldetailsfrom: JSON.stringify(formData),
+            persnoaldetailsfrom: JSON.stringify([formData]),
           },
           userID
         );
@@ -99,7 +124,6 @@ function Presnolquestionpre(props) {
     }
     setOpen(false);
   };
-  console.log("formData", formData)
   const handleCancel = () => {
     setOpen(false);
     setShowInfo(false);
@@ -122,8 +146,8 @@ function Presnolquestionpre(props) {
           setCommentBox(true);
         }}
       >
-      {formData?.map((item, index) => (
-
+      {/* {formData?.map((item, index) => ( */}
+      
         <Grid container spacing={2}>
           <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
             <p>How Your Become Interested In Desired Area? (min 250)</p>
@@ -131,8 +155,8 @@ function Presnolquestionpre(props) {
               type="text"
               multiline
               name="interestindesirearea"
-              value={item.interestindesirearea || ""}
-              onChange={(e) => handleChange(e, index)}
+              value={formData.interestindesirearea || ""}
+              onChange={(e) => handleChange(e)}
               disabled={!editable}
             />
             <p>How Your Surrounding Help You To Build Interest In Desired Area? (min 250)</p>
@@ -140,8 +164,8 @@ function Presnolquestionpre(props) {
               type="text"
               multiline
               name="surroundinghelpyou"
-              value={item.surroundinghelpyou || ""}
-              onChange={(e) => handleChange(e, index)}
+              value={formData.surroundinghelpyou || ""}
+              onChange={(e) => handleChange(e)}
               disabled={!editable}
             />
             <p>How Your Family Help You To Build Interest For Desired Area? (min 250)</p>
@@ -149,8 +173,8 @@ function Presnolquestionpre(props) {
               type="text"
               multiline
               name="Familyhelpyou"
-              value={item.Familyhelpyou || ""}
-              onChange={(e) => handleChange(e, index)}
+              value={formData.Familyhelpyou || ""}
+              onChange={(e) => handleChange(e)}
               disabled={!editable}
             />
             <p>How Your Academic Backgroud Help You To Build Interest For Desired Area? (min 250)</p>
@@ -158,8 +182,8 @@ function Presnolquestionpre(props) {
               type="text"
               multiline
               name="AcademicBackgroudhelpyou"
-              value={item.AcademicBackgroudhelpyou || ""}
-              onChange={(e) => handleChange(e, index)}
+              value={formData.AcademicBackgroudhelpyou || ""}
+              onChange={(e) => handleChange(e)}
               disabled={!editable}
             />
             <p>How Your Professional Backgroud Help You To Build Interest For Desired Area? (min 250)</p>
@@ -167,8 +191,8 @@ function Presnolquestionpre(props) {
               type="text"
               multiline
               name="professionalBackgroudyou"
-              value={item.professionalBackgroudyou || ""}
-              onChange={(e) => handleChange(e, index)}
+              value={formData.professionalBackgroudyou || ""}
+              onChange={(e) => handleChange(e)}
               disabled={!editable}
             />
             <p>When And At What Incidence You Goal Started Taking Shape In Your Mind And Why? (min 250)</p>
@@ -176,8 +200,8 @@ function Presnolquestionpre(props) {
               type="text"
               multiline
               name="startedakingshapeinyourmind"
-              value={item.startedakingshapeinyourmind || ""}
-              onChange={(e) => handleChange(e, index)}
+              value={formData.startedakingshapeinyourmind || ""}
+              onChange={(e) => handleChange(e)}
               disabled={!editable}
             />
             <p>What Is Your Short And Long Term Goal? (min 250)</p>
@@ -185,8 +209,8 @@ function Presnolquestionpre(props) {
               type="text"
               multiline
               name="shortandlongtermgoal"
-              value={item.shortandlongtermgoal || ""}
-              onChange={(e) => handleChange(e, index)}
+              value={formData.shortandlongtermgoal || ""}
+              onChange={(e) => handleChange(e)}
               disabled={!editable}
             />
             <p>How This Course Will Help You To Achive Desired Goal? (min 250)</p>
@@ -194,8 +218,8 @@ function Presnolquestionpre(props) {
               type="text"
               multiline
               name="helpdesirecoursetohelpgoal"
-              value={item.helpdesirecoursetohelpgoal || ""}
-              onChange={(e) => handleChange(e, index)}
+              value={formData.helpdesirecoursetohelpgoal || ""}
+              onChange={(e) => handleChange(e)}
               disabled={!editable}
             />
             <p>How Pursing This Course Help You To Make World/society Better Place? (min 250)</p>
@@ -203,8 +227,8 @@ function Presnolquestionpre(props) {
               type="text"
               multiline
               name="coursemakingsositybatterplace"
-              value={item.coursemakingsositybatterplace || ""}
-              onChange={(e) => handleChange(e, index)}
+              value={formData.coursemakingsositybatterplace || ""}
+              onChange={(e) => handleChange(e)}
               disabled={!editable}
             />
             <p>How Pursing This Course Is The Logical Culmination Of Your Growth / Progress ? (min 250)</p>
@@ -212,13 +236,13 @@ function Presnolquestionpre(props) {
               type="text"
               multiline
               name="ogicalculminationofyourprogress"
-              value={item.ogicalculminationofyourprogress || ""}
-              onChange={(e) => handleChange(e, index)}
+              value={formData.ogicalculminationofyourprogress || ""}
+              onChange={(e) => handleChange(e)}
               disabled={!editable}
             />
           </Grid>
         </Grid>
-      ))}
+      {/* ))} */}
 
        {editable && (
         <div
@@ -257,15 +281,14 @@ function Presnolquestionpre(props) {
             </DialogContentText>
            ) : ( 
             <DialogContentText id="alert-dialog-description">
-              {formData.map((item, index) =>
-                Object.entries(item).map(([key, value]) => (
+             
+                {Object.entries(formData).map(([key, value]) => (
                   <div style={{ display: "flex", alignItems: "center" }} key={key}>
                     <p style={{ margin: "0px 10px" }}>{key.replace(/([A-Z])/g, " $1")}</p>
-                    <p style={{ color: value?.length < 250 ? "red" : "green" }}>{value?.length}</p>
+                    <p style={{ color: countWords(value) < 250 ? "red" : "green" }}>{countWords(value)}</p>
                   </div>
-                ))
-              )
-              }
+                ))      
+          }
             </DialogContentText>
            )} 
         </DialogContent>
